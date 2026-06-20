@@ -22,10 +22,10 @@
         <span>GiavaScript</span>
       </div>
       <nav class="nav" aria-label="Primary">
-        <a href="https://github.com/GiavaScript/GiavaScript" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/GiavaScript/GiavaScript#readme" target="_blank" rel="noreferrer">Install</a>
         <a href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md" target="_blank"
-          rel="noreferrer">Reference</a>
-        <a href="https://github.com/GiavaScript/GiavaScript/tree/main/spec" target="_blank" rel="noreferrer">Spec</a>
+          rel="noreferrer">Docs</a>
+        <a href="https://github.com/GiavaScript/GiavaScript" target="_blank" rel="noreferrer">GitHub</a>
       </nav>
     </header>
 
@@ -44,9 +44,8 @@
         </div>
 
         <p class="hero-copy">
-          GS runs JavaScript with <strong>intentional non-standard differences</strong>.
-          Keep the JS vibe, use <strong><code>var</code></strong>, and build with a runtime shaped by Crystal internals
-          and JavaScript ergonomics.
+          GiavaScript runs JavaScript with <strong>intentional non-standard differences</strong>.
+          Keep JavaScript's familiar feel while running on a runtime built with Crystal internals and practical JS ergonomics.
         </p>
 
         <div class="actions">
@@ -60,12 +59,12 @@
       <section class="samples" aria-label="GiavaScript examples">
         <article class="card">
           <code><span class="cmt">// declarations</span>
-<span class="kw">var</span> name <span class="op">=</span> <span class="op">"</span>GiavaScript<span class="op">"</span>
-<span class="kw">var</span> version <span class="op">=</span> <span class="op">"</span>runtime<span class="op">"</span>
+<span class="kw">var</span> name <span class="op">=</span> <span class="str">"GiavaScript"</span>
+<span class="kw">var</span> version <span class="op">=</span> <span class="str">"runtime"</span>
 
 <span class="cmt">// non-standard notes</span>
-<span class="kw">if</span> (<span class="kw">typeof</span> name <span class="op">===</span> <span class="op">"</span>string<span class="op">"</span>) {
-  console.<span class="fn">log</span>(<span class="op">`</span>${name} ${version}<span class="op">`</span>)
+<span class="kw">if</span> (<span class="kw">typeof</span> name <span class="op">===</span> <span class="str">"string"</span>) {
+  console.<span class="fn">log</span>(<span class="str">`${name} ${version}`</span>)
 }</code>
           <div class="card-footer">
             <span>Declarations + typeof</span>
@@ -74,9 +73,9 @@
 
         <article class="card">
           <code><span class="cmt">// arrays + callbacks</span>
-<span class="kw">var</span> nums <span class="op">=</span> [1, 2, 3, 4, 5]
+<span class="kw">var</span> nums <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
 <span class="kw">var</span> even <span class="op">=</span> nums.<span class="fn">filter</span>(<span class="kw">function</span>(n) {
-  <span class="kw">return</span> n % 2 <span class="op">===</span> 0
+  <span class="kw">return</span> n % <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>
 })
 
 <span class="kw">var</span> json <span class="op">=</span> JSON.<span class="fn">stringify</span>(even)
@@ -92,9 +91,9 @@ console.<span class="fn">log</span>(json)</code>
   <span class="kw">return</span> Math.<span class="fn">pow</span>(base, exp)
 }
 
-<span class="kw">var</span> score <span class="op">=</span> <span class="fn">powerScore</span>(2, 8)
-<span class="kw">if</span> (score <span class="op">===</span> 256) {
-  console.<span class="fn">log</span>(<span class="op">"</span>GS runtime ready<span class="op">"</span>)
+<span class="kw">var</span> score <span class="op">=</span> <span class="fn">powerScore</span>(<span class="num">2</span>, <span class="num">8</span>)
+<span class="kw">if</span> (score <span class="op">===</span> <span class="num">256</span>) {
+  console.<span class="fn">log</span>(<span class="str">"GS runtime ready"</span>)
 }</code>
           <div class="card-footer">
             <span>Functions + Math</span>

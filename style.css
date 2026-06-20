@@ -63,7 +63,8 @@ body::after {
   height: 72px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  position: relative;
   border-bottom: 1px solid rgba(200, 169, 106, 0.2);
 }
 
@@ -87,16 +88,49 @@ body::after {
   gap: 1.2rem;
   align-items: center;
   font-size: 0.92rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 72px;
+  padding: 0 1rem;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   color: #e8dcc6;
   text-decoration: none;
   opacity: 0.9;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
 .nav a:hover {
-  color: #fff;
+  color: #f3d4a0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(0, 0, 0, 0.28) 100%);
+  border-color: rgba(200, 169, 106, 0.15);
+}
+
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(200, 169, 106, 0.15), rgba(200, 169, 106, 0.92), rgba(200, 169, 106, 0.15));
+  opacity: 0;
+  transform: scaleX(0.55);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.nav a:hover::after,
+.nav a:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .hero {
@@ -344,25 +378,34 @@ body::after {
   font-family: "JetBrains Mono", monospace;
   font-size: 0.86rem;
   line-height: 1.6;
-  color: #ecedf4;
+  color: #abb2bf;
   margin: 0;
   min-height: 260px;
 }
 
 .cmt {
-  color: #9f8f73;
+  color: #5c6370;
+  font-style: italic;
 }
 
 .kw {
-  color: #7ed6ff;
+  color: #c678dd;
 }
 
 .fn {
-  color: #f9dd39;
+  color: #61afef;
 }
 
 .op {
-  color: #ff857b;
+  color: #56b6c2;
+}
+
+.str {
+  color: #98c379;
+}
+
+.num {
+  color: #d19a66;
 }
 
 .card-footer {
@@ -377,7 +420,7 @@ body::after {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 12px;
+  bottom: 24px;
   z-index: 4;
   text-align: center;
   margin: 0;
@@ -411,10 +454,24 @@ body::after {
   }
 
   .nav {
+    position: static;
+    transform: none;
     width: 100%;
     justify-content: space-between;
     gap: 0.6rem;
     font-size: 0.86rem;
+  }
+
+  .nav a {
+    height: auto;
+    padding: 0.2rem 0.35rem;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .nav a::after {
+    left: 0;
+    right: 0;
   }
 
   .burst {
