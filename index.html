@@ -1,1 +1,115 @@
-The GiavaScript JavaScript Runtime!
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GiavaScript — Run JavaScript Everywhere</title>
+  <meta name="description" content="GiavaScript (GS) is a runtime for JavaScript with intentional non-standard differences.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <img src="logo.png" alt="GiavaScript logo">
+        <span>GiavaScript</span>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a href="https://github.com/GiavaScript/GiavaScript" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md" target="_blank"
+          rel="noreferrer">Reference</a>
+        <a href="https://github.com/GiavaScript/GiavaScript/tree/main/spec" target="_blank" rel="noreferrer">Spec</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="overline">A pragmatic JavaScript runtime</div>
+        <div class="burst" aria-hidden="true">
+          <div class="rays" id="rays"></div>
+          <div class="core">
+            <div class="core-inner">
+              <small>GiavaScript</small>
+              <h1>GS</h1>
+              <p>RUNTIME</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="hero-copy">
+          GS runs JavaScript with <strong>intentional non-standard differences</strong>.
+          Keep the JS vibe, use <strong><code>var</code></strong>, and build with a runtime shaped by Crystal internals
+          and JavaScript ergonomics.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/GiavaScript/GiavaScript" target="_blank"
+            rel="noreferrer">Download</a>
+          <a class="btn secondary" href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md"
+            target="_blank" rel="noreferrer">Read Reference</a>
+        </div>
+      </section>
+
+      <section class="samples" aria-label="GiavaScript examples">
+        <article class="card">
+          <code><span class="cmt">// declarations</span>
+<span class="kw">var</span> name <span class="op">=</span> <span class="op">"</span>GiavaScript<span class="op">"</span>
+<span class="kw">var</span> version <span class="op">=</span> <span class="op">"</span>runtime<span class="op">"</span>
+
+<span class="cmt">// non-standard notes</span>
+<span class="kw">if</span> (<span class="kw">typeof</span> name <span class="op">===</span> <span class="op">"</span>string<span class="op">"</span>) {
+  console.<span class="fn">log</span>(<span class="op">`</span>${name} ${version}<span class="op">`</span>)
+}</code>
+          <div class="card-footer">
+            <span>Declarations + typeof</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <code><span class="cmt">// arrays + callbacks</span>
+<span class="kw">var</span> nums <span class="op">=</span> [1, 2, 3, 4, 5]
+<span class="kw">var</span> even <span class="op">=</span> nums.<span class="fn">filter</span>(<span class="kw">function</span>(n) {
+  <span class="kw">return</span> n % 2 <span class="op">===</span> 0
+})
+
+<span class="kw">var</span> json <span class="op">=</span> JSON.<span class="fn">stringify</span>(even)
+console.<span class="fn">log</span>(json)</code>
+          <div class="card-footer">
+            <span>Array + JSON support</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <code><span class="cmt">// control flow and Math</span>
+<span class="kw">function</span> <span class="fn">powerScore</span>(base, exp) {
+  <span class="kw">return</span> Math.<span class="fn">pow</span>(base, exp)
+}
+
+<span class="kw">var</span> score <span class="op">=</span> <span class="fn">powerScore</span>(2, 8)
+<span class="kw">if</span> (score <span class="op">===</span> 256) {
+  console.<span class="fn">log</span>(<span class="op">"</span>GS runtime ready<span class="op">"</span>)
+}</code>
+          <div class="card-footer">
+            <span>Functions + Math</span>
+          </div>
+        </article>
+      </section>
+
+      <p class="meta">
+        Want to learn more about GiavaScript? <a href="https://github.com/GiavaScript/GiavaScript" target="_blank"
+          rel="noreferrer">Explore the project</a>
+      </p>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
