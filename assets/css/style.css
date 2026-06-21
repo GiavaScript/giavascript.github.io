@@ -23,9 +23,9 @@ body {
   font-family: "Manrope", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at -10% 56%, rgba(10, 11, 14, 0.85) 0 260px, transparent 262px),
-    radial-gradient(circle at 112% 78%, rgba(10, 11, 14, 0.78) 0 260px, transparent 262px),
-    linear-gradient(180deg, #1c1918 0%, #282221 100%);
+    radial-gradient(circle at 8% 8%, rgba(126, 214, 255, 0.16), transparent 30%),
+    radial-gradient(circle at 90% 18%, rgba(230, 31, 43, 0.12), transparent 34%),
+    linear-gradient(160deg, #161619 0%, #1f1d21 42%, #151418 100%);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -74,12 +74,14 @@ body::after {
   gap: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.01em;
+  color: inherit;
+  text-decoration: none;
 }
 
 .brand img {
   width: 36px;
   height: 36px;
-  border-radius: 9px;
+  border-radius: 0;
   background: #fff;
 }
 
@@ -120,7 +122,7 @@ body::after {
   right: 10px;
   bottom: 0;
   height: 2px;
-  border-radius: 2px;
+  border-radius: 0;
   background: linear-gradient(90deg, rgba(200, 169, 106, 0.15), rgba(200, 169, 106, 0.92), rgba(200, 169, 106, 0.15));
   opacity: 0;
   transform: scaleX(0.55);
@@ -129,6 +131,17 @@ body::after {
 
 .nav a:hover::after,
 .nav a:focus-visible::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.nav a.active {
+  color: #f8e0ad;
+  border-color: rgba(200, 169, 106, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.24) 100%);
+}
+
+.nav a.active::after {
   opacity: 1;
   transform: scaleX(1);
 }
@@ -213,19 +226,19 @@ body::after {
     transform: rotate(45deg) scale(1);
   }
 
-  7% {
+  5% {
     transform: rotate(45deg) scale(1.045);
   }
 
-  14% {
+  10% {
     transform: rotate(45deg) scale(1);
   }
 
-  21% {
+  20% {
     transform: rotate(45deg) scale(1.065);
   }
 
-  34% {
+  30% {
     transform: rotate(45deg) scale(1);
   }
 }
@@ -235,7 +248,7 @@ body::after {
   height: var(--core-size);
   margin: 0;
   transform: rotate(45deg);
-  border-radius: 6px;
+  border-radius: 0;
   background:
     linear-gradient(155deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 38%),
     linear-gradient(320deg, #2f3136 0%, #111317 42%, #050608 100%);
@@ -246,14 +259,14 @@ body::after {
     0 0 18px rgba(180, 205, 235, 0.18);
   position: relative;
   z-index: 2;
-  animation: core-heartbeat 1.95s ease-in-out infinite;
+  animation: core-heartbeat 3s ease-in-out infinite;
 }
 
 .core::before {
   content: "";
   position: absolute;
   inset: -1px;
-  border-radius: 6px;
+  border-radius: 0;
   border: 1px solid rgba(204, 224, 248, 0.34);
 }
 
@@ -261,7 +274,7 @@ body::after {
   content: "";
   position: absolute;
   inset: 18% 18% 18% 18%;
-  border-radius: 4px;
+  border-radius: 0;
   transform: rotate(90deg);
   background: linear-gradient(180deg, rgba(167, 197, 235, 0.24) 0%, rgba(167, 197, 235, 0.04) 34%, rgba(255, 255, 255, 0) 100%);
   filter: blur(0.4px);
@@ -318,7 +331,7 @@ body::after {
 
 .btn {
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0.58rem 1.15rem;
   text-decoration: none;
   font-weight: 700;
@@ -355,7 +368,7 @@ body::after {
 .card {
   background: var(--panel);
   border: 1px solid rgba(200, 169, 106, 0.85);
-  border-radius: 14px;
+  border-radius: 0;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -435,8 +448,191 @@ body::after {
   font-weight: 700;
 }
 
+.install-wrap {
+  padding-bottom: 3.2rem;
+}
+
+.install-page {
+  padding: 2.4rem 0 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.install-hero {
+  border: 1px solid rgba(200, 169, 106, 0.32);
+  border-radius: 0;
+  padding: 1.6rem;
+  background: linear-gradient(145deg, rgba(200, 169, 106, 0.1) 0%, rgba(12, 13, 17, 0.84) 52%);
+  box-shadow: var(--shadow);
+}
+
+.install-hero h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  line-height: 1.08;
+}
+
+.install-hero p {
+  width: min(760px, 100%);
+  margin: 0.9rem 0 0;
+  color: #dfd1ba;
+  line-height: 1.58;
+}
+
+.install-hero code {
+  font-family: "JetBrains Mono", monospace;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  padding: 0.08rem 0.35rem;
+}
+
+.channel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.channel-card {
+  border: 1px solid rgba(126, 214, 255, 0.34);
+  border-radius: 0;
+  background: rgba(11, 14, 19, 0.85);
+  padding: 1rem 1rem 0.95rem;
+}
+
+.channel-card h2 {
+  margin: 0;
+  font-size: 1.06rem;
+}
+
+.channel-card p {
+  margin: 0.55rem 0 0;
+  color: #d4c3a6;
+  line-height: 1.45;
+}
+
+.channel-card span {
+  margin-top: 0.8rem;
+  display: inline-flex;
+  padding: 0.24rem 0.65rem;
+  border: 1px solid rgba(247, 223, 30, 0.5);
+  border-radius: 0;
+  color: #f7df1e;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.install-panel {
+  border: 1px solid rgba(200, 169, 106, 0.34);
+  border-radius: 0;
+  padding: 1rem;
+  background: linear-gradient(180deg, rgba(11, 12, 15, 0.8) 0%, rgba(18, 17, 22, 0.96) 100%);
+}
+
+.platform-tabs {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.platform-tab {
+  border: 1px solid rgba(200, 169, 106, 0.35);
+  border-radius: 0;
+  padding: 0.44rem 0.9rem;
+  background: rgba(255, 255, 255, 0.02);
+  color: #e8dcc6;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.platform-tab.active {
+  background: #f7df1e;
+  color: #171718;
+  border-color: #d2be39;
+}
+
+.platform-block {
+  display: none;
+}
+
+.platform-block.active {
+  display: block;
+}
+
+.platform-block h3 {
+  margin: 0;
+  font-size: 1.06rem;
+}
+
+.platform-block p {
+  margin: 0.45rem 0 0;
+  color: #d4c3a6;
+}
+
+.platform-block pre,
+.verify-card pre {
+  margin: 0.8rem 0 0;
+  background: #090b0d;
+  border: 1px solid rgba(126, 214, 255, 0.32);
+  border-radius: 0;
+  padding: 0.88rem;
+  overflow-x: auto;
+}
+
+.platform-block code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.86rem;
+  color: #d7effd;
+  line-height: 1.58;
+}
+
+.verify-card code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.86rem;
+  color: #abb2bf;
+  line-height: 1.58;
+}
+
+.copy-btn {
+  margin-top: 0.75rem;
+  border: 1px solid rgba(247, 223, 30, 0.45);
+  border-radius: 0;
+  background: rgba(247, 223, 30, 0.12);
+  color: #f5dfa6;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.38rem 0.82rem;
+  cursor: pointer;
+}
+
+.verify-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.verify-card {
+  border: 1px solid rgba(126, 214, 255, 0.26);
+  border-radius: 0;
+  padding: 1rem;
+  background: rgba(11, 14, 19, 0.74);
+}
+
+.verify-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
 @media (max-width: 920px) {
   .samples {
+    grid-template-columns: 1fr;
+  }
+
+  .channel-grid,
+  .verify-grid {
     grid-template-columns: 1fr;
   }
 
@@ -481,6 +677,18 @@ body::after {
 
   .hero-copy {
     font-size: 0.95rem;
+  }
+
+  .install-page {
+    padding-top: 1.5rem;
+    gap: 1rem;
+  }
+
+  .install-hero,
+  .install-panel,
+  .verify-card,
+  .channel-card {
+    border-radius: 0;
   }
 
   .meta {

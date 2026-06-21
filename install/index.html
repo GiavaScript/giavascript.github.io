@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install GiavaScript</title>
+  <meta name="description" content="Install GiavaScript on macOS, Linux, or Windows and run your first GS script.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body class="install-body">
+  <div class="wrap install-wrap">
+    <header class="topbar">
+      <a class="brand" href="../index.html" aria-label="GiavaScript home">
+        <img src="../assets/images/logo.png" alt="GiavaScript logo">
+        <span>GiavaScript</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="index.html" class="active" aria-current="page">Install</a>
+        <a href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md" target="_blank"
+          rel="noreferrer">Docs</a>
+        <a href="https://github.com/GiavaScript/GiavaScript" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="install-page">
+      <section class="install-hero">
+        <p class="overline">Setup guide</p>
+        <h1>Install GiavaScript from source</h1>
+        <p>
+          For now, GiavaScript is installed directly from the repository. Run the commands below in order.
+        </p>
+      </section>
+
+      <section class="install-panel" aria-label="Platform commands">
+        <article class="platform-block active">
+          <h3>Current installation method</h3>
+          <p>Clone the repository, enter the project folder, then run the installer.</p>
+          <pre><code>git clone https://github.com/memburg/GiavaScript.git
+cd GiavaScript
+./install.sh</code></pre>
+          <button class="copy-btn" data-copy="git clone https://github.com/memburg/GiavaScript.git
+cd GiavaScript
+./install.sh">Copy command</button>
+        </article>
+      </section>
+
+      <section class="verify-grid" aria-label="Verification and next steps">
+        <article class="verify-card">
+          <h3>Verify installation</h3>
+          <pre><code>gs --version
+gs run hello.gs</code></pre>
+        </article>
+        <article class="verify-card">
+          <h3>Create your first file</h3>
+          <pre><code><span class="cmt">// hello.gs</span>
+<span class="kw">var</span> message <span class="op">=</span> <span class="str">"GiavaScript is live"</span>
+console.<span class="fn">log</span>(message)</code></pre>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/install.js"></script>
+</body>
+
+</html>
