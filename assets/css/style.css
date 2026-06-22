@@ -430,16 +430,27 @@ body::after {
 }
 
 .meta {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 24px;
-  z-index: 4;
+  position: static;
   text-align: center;
-  margin: 0;
+  margin: 1.1rem 0 0;
   padding: 0 1rem;
   color: #d8cab0;
   font-size: 0.94rem;
+}
+
+@media (min-width: 980px) and (min-height: 900px) {
+  .home-body .wrap {
+    padding-bottom: 5rem;
+  }
+
+  .home-body .meta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    z-index: 4;
+    margin-top: 0;
+  }
 }
 
 .meta a {
@@ -692,8 +703,6 @@ body::after {
   }
 
   .meta {
-    position: static;
-    margin-top: 1.1rem;
     padding: 0;
   }
 }
