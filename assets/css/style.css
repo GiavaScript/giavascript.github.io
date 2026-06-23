@@ -467,6 +467,7 @@ body::after {
   padding: 2.4rem 0 0;
   display: grid;
   gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .install-hero {
@@ -591,6 +592,8 @@ body::after {
   border-radius: 0;
   padding: 0.88rem;
   overflow-x: auto;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .platform-block code {
