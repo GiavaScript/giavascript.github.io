@@ -1,114 +1,300 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GiavaScript — Run JavaScript Everywhere</title>
-  <meta name="description" content="GiavaScript (GS) is a runtime for JavaScript with intentional non-standard differences.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiavaScript — a pragmatic JavaScript runtime</title>
+    <meta name="description" content="GiavaScript is a small, cross-platform JavaScript runtime with intentional non-standard differences.">
+    <style>
+        :root {
+            --line: #d9d9d9;
+            --muted: #767676;
+            --red: #e60012;
+            --blue: #0033cc;
+            --code: #f6f6f6;
+            --max: 960px
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #fff;
+            color: #222;
+            font: 14px/1.6 "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif
+        }
+
+        a {
+            color: var(--blue);
+            text-decoration: none
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .topbar {
+            height: 56px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 0 max(16px, calc((100vw - var(--max))/2))
+        }
+
+        .brand {
+            color: var(--red);
+            font-weight: 700;
+            font-size: 19px;
+            letter-spacing: -0.02em
+        }
+
+        .brand:hover {
+            text-decoration: none
+        }
+
+        .brand b {
+            color: #222;
+            font-weight: 700
+        }
+
+        .topbar nav {
+            display: flex;
+            gap: 20px;
+            font-size: 13px
+        }
+
+        main {
+            max-width: var(--max);
+            margin: auto;
+            padding: 0 16px
+        }
+
+        .hero {
+            padding: 56px 0 40px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .eyebrow {
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 3.2rem);
+            line-height: 1.05;
+            margin: 10px 0 0;
+            letter-spacing: -0.03em
+        }
+
+        .version {
+            font-size: 0.42em;
+            font-weight: 600;
+            color: #fff;
+            background: var(--red);
+            border-radius: 3px;
+            padding: 4px 9px;
+            vertical-align: middle;
+            letter-spacing: 0
+        }
+
+        .hero-copy {
+            max-width: 640px;
+            color: #444;
+            font-size: 15px;
+            margin: 18px 0 0
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 18px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .btn:hover {
+            text-decoration: none
+        }
+
+        .btn.primary {
+            background: var(--red);
+            border-color: var(--red);
+            color: #fff
+        }
+
+        .btn.primary:hover {
+            background: #c5000f
+        }
+
+        .btn.secondary {
+            background: #fff;
+            color: var(--blue)
+        }
+
+        .btn.secondary:hover {
+            background: #f2f6ff;
+            border-color: #b3b3b3
+        }
+
+        .install {
+            margin-top: 28px;
+            max-width: 640px;
+            position: relative
+        }
+
+        .install pre {
+            margin: 0;
+            background: var(--code);
+            border: 1px solid var(--line);
+            padding: 12px 64px 12px 12px;
+            overflow: auto;
+            font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            color: #333
+        }
+
+        .install .copy {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            background: #fff;
+            border: 1px solid var(--line);
+            color: var(--muted);
+            padding: 3px 8px;
+            cursor: pointer;
+            font: inherit;
+            font-size: 12px;
+            border-radius: 2px
+        }
+
+        .install .copy:hover {
+            color: var(--blue);
+            border-color: #b3b3b3
+        }
+
+        .quickstart {
+            padding: 32px 0 56px
+        }
+
+        .quickstart h2 {
+            font-size: 1.25rem;
+            margin: 0 0 10px;
+            padding-left: 9px;
+            border-left: 4px solid var(--red)
+        }
+
+        .quickstart p {
+            color: #444
+        }
+
+        .quickstart code {
+            color: #b3001b;
+            font-size: .94em
+        }
+
+        .quickstart pre {
+            margin: 14px 0 0;
+            background: var(--code);
+            border: 1px solid var(--line);
+            padding: 12px;
+            overflow: auto;
+            font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            color: #333
+        }
+
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 18px max(16px, calc((100vw - var(--max))/2));
+            color: var(--muted);
+            font-size: 12px
+        }
+
+        footer a {
+            color: var(--blue)
+        }
+
+        @media(max-width: 600px) {
+            .topbar {
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 16px;
+                gap: 8px
+            }
+
+            .hero {
+                padding: 36px 0 28px
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: flex-start
+            }
+        }
+    </style>
 </head>
 
-<body class="home-body">
-  <div class="wrap">
+<body>
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="GiavaScript home">
-        <img src="assets/images/logo.png" alt="GiavaScript logo">
-        <span>GiavaScript</span>
-      </a>
-      <nav class="nav" aria-label="Primary">
-        <a href="install/">Install</a>
-        <a href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md" target="_blank"
-          rel="noreferrer">Docs</a>
-        <a href="https://github.com/GiavaScript/GiavaScript" target="_blank" rel="noreferrer">GitHub</a>
-      </nav>
+        <a class="brand" href="./">Giava<b>Script</b></a>
+        <nav>
+            <a href="docs/">Documentation</a>
+            <a href="https://github.com/GiavaScript/GiavaScript">GitHub</a>
+        </nav>
     </header>
 
     <main>
-      <section class="hero">
-        <div class="overline">A pragmatic JavaScript runtime</div>
-        <div class="burst" aria-hidden="true">
-          <div class="rays" id="rays"></div>
-          <div class="core">
-            <div class="core-inner">
-              <small>GiavaScript</small>
-              <h1>GS</h1>
-              <p>RUNTIME</p>
+        <section class="hero">
+            <div class="eyebrow">A pragmatic JavaScript runtime</div>
+            <h1>GiavaScript <span class="version">v0.7.0</span></h1>
+            <p class="hero-copy">
+                GiavaScript is a small, cross-platform JavaScript runtime built in Crystal.
+                It implements a curated subset of JavaScript, so you keep the familiar feel
+                while running on a fast, practical runtime.
+            </p>
+            <div class="actions">
+                <a class="btn primary" href="docs/">Get Started</a>
+                <a class="btn secondary" href="https://github.com/GiavaScript/GiavaScript">View on GitHub</a>
             </div>
-          </div>
-        </div>
+            <div class="install">
+                <button class="copy" type="button">Copy</button>
+                <pre><code>brew tap GiavaScript/giavascript && brew install giavascript</code></pre>
+            </div>
+        </section>
 
-        <p class="hero-copy">
-          GiavaScript runs JavaScript with <strong>intentional non-standard differences</strong>.
-          Keep JavaScript's familiar feel while running on a runtime built with Crystal internals and practical JS ergonomics.
-        </p>
-
-        <div class="actions">
-          <a class="btn primary" href="https://github.com/GiavaScript/GiavaScript" target="_blank"
-            rel="noreferrer">Download</a>
-          <a class="btn secondary" href="https://github.com/GiavaScript/GiavaScript/blob/main/reference/REFERENCE.md"
-            target="_blank" rel="noreferrer">Read Reference</a>
-        </div>
-      </section>
-
-      <section class="samples" aria-label="GiavaScript examples">
-        <article class="card">
-          <code><span class="cmt">// declarations</span>
-<span class="kw">var</span> name <span class="op">=</span> <span class="str">"GiavaScript"</span>
-<span class="kw">var</span> version <span class="op">=</span> <span class="str">"runtime"</span>
-
-<span class="cmt">// non-standard notes</span>
-<span class="kw">if</span> (<span class="kw">typeof</span> name <span class="op">===</span> <span class="str">"string"</span>) {
-  console.<span class="fn">log</span>(<span class="str">`${name} ${version}`</span>)
-}</code>
-          <div class="card-footer">
-            <span>Declarations + typeof</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <code><span class="cmt">// arrays + callbacks</span>
-<span class="kw">var</span> nums <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
-<span class="kw">var</span> even <span class="op">=</span> nums.<span class="fn">filter</span>(<span class="kw">function</span>(n) {
-  <span class="kw">return</span> n % <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>
-})
-
-<span class="kw">var</span> json <span class="op">=</span> JSON.<span class="fn">stringify</span>(even)
-console.<span class="fn">log</span>(json)</code>
-          <div class="card-footer">
-            <span>Array + JSON support</span>
-          </div>
-        </article>
-
-        <article class="card">
-          <code><span class="cmt">// control flow and Math</span>
-<span class="kw">function</span> <span class="fn">powerScore</span>(base, exp) {
-  <span class="kw">return</span> Math.<span class="fn">pow</span>(base, exp)
-}
-
-<span class="kw">var</span> score <span class="op">=</span> <span class="fn">powerScore</span>(<span class="num">2</span>, <span class="num">8</span>)
-<span class="kw">if</span> (score <span class="op">===</span> <span class="num">256</span>) {
-  console.<span class="fn">log</span>(<span class="str">"GS runtime ready"</span>)
-}</code>
-          <div class="card-footer">
-            <span>Functions + Math</span>
-          </div>
-        </article>
-      </section>
-
-      <p class="meta">
-        Want to learn more about GiavaScript? <a href="https://github.com/GiavaScript/GiavaScript" target="_blank"
-          rel="noreferrer">Explore the project</a>
-      </p>
+        <section class="quickstart">
+            <h2>Quick start</h2>
+            <p>Run a file with <code>gs path/to/program.js</code>, or open a REPL with <code>gs</code>.</p>
+            <pre><code>var name = "GiavaScript";
+console.log(`Hello, ${name}`); // Hello, GiavaScript</code></pre>
+        </section>
     </main>
-  </div>
 
-  <script src="assets/js/home.js"></script>
+    <footer>
+        GiavaScript v0.7.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
+        <a href="docs/">Documentation</a>
+    </footer>
+
+    <script>
+        document.querySelector(".install .copy").addEventListener("click", function () {
+            navigator.clipboard.writeText(this.parentElement.querySelector("code").textContent);
+            this.textContent = "Copied";
+            setTimeout(function (btn) { btn.textContent = "Copy"; }, 1200, this);
+        });
+    </script>
 </body>
 
 </html>

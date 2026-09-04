@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GiavaScript docs</title>
+  <meta name="description" content="Documentation for the GiavaScript runtime.">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="../">GiavaScript <span>/ docs</span></a>
+    <button class="menu" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    <label class="search"><span>Search</span><input id="search" type="search" placeholder="Search docs"
+        autocomplete="off"></label>
+  </header>
+  <div class="layout">
+    <aside id="sidebar" class="sidebar">
+      <nav aria-label="Documentation">
+        <a href="#start">Getting Started</a>
+        <a href="#language">Language Basics</a>
+        <a href="#functions">Functions</a>
+        <a href="#control">Control Flow</a>
+        <a href="#values">Values and Collections</a>
+        <a href="#global">Global APIs</a>
+        <a href="#string">String</a>
+        <a href="#array">Array</a>
+        <a href="#objects">Object, Number, Boolean</a>
+        <a href="#math">Math</a>
+        <a href="#date">Date and RegExp</a>
+        <a href="#json">JSON and Errors</a>
+        <a href="#host">File, Process, Network</a>
+        <a href="#compatibility">Compatibility</a>
+      </nav>
+    </aside>
+    <main class="content">
+      <div class="intro">
+        <p class="eyebrow">Reference</p>
+        <h1>GiavaScript documentation</h1>
+        <p>GiavaScript is a small, cross-platform JavaScript runtime. It implements a curated subset of JavaScript, so
+          this reference describes GiavaScript behavior only.</p>
+      </div>
+      <aside class="toc" aria-label="On this page"><strong>On this page</strong><a href="#start">Start here</a><a
+          href="#language">Language</a><a href="#global">APIs</a><a href="#compatibility">Compatibility</a></aside>
+
+      <section id="start" class="doc-section">
+        <h2>Getting Started</h2>
+        <p>Install with Homebrew on macOS or Linux:</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>brew tap GiavaScript/giavascript &amp;&amp; brew install giavascript</code></pre>
+        </div>
+        <p>Update an existing installation:</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>brew update &amp;&amp; brew upgrade giavascript</code></pre>
+        </div>
+        <p>Run a file with <code>gs path/to/program.js</code>, or start the REPL with <code>gs</code>. Leave the REPL
+          with <code>:quit</code>. An empty file is an error. Runtime errors go to standard error; an
+          <code>Error:</code> message gives the CLI an exit status of <code>1</code>.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>var name = "GiavaScript";
+console.log(`Hello, ${name}`); // stdout: Hello, GiavaScript</code></pre>
+        </div>
+      </section>
+
+      <section id="language" class="doc-section">
+        <h2>Language Basics</h2>
+        <p>Use <code>var</code> declarations, assignment, compound assignment, postfix <code>++</code>/<code>--</code>,
+          numbers, strings, booleans, <code>null</code>, <code>undefined</code>, arrays, objects, functions, dates,
+          regular expressions, and errors. Property access uses dot or brackets. Statements on separate lines do not
+          need semicolons. Local files can be evaluated with <code>import "path/to/file.js"</code>.</p>
+        <p>Supported operators include arithmetic, bitwise, comparisons, strict and coercive equality, logical
+          operators, ternaries, unary <code>+</code>, <code>typeof</code>, and <code>void</code>.
+          <code>==</code>/<code>!=</code> coerce; <code>===</code>/<code>!==</code> do not. <code>&amp;&amp;</code> and
+          <code>||</code> return an operand and short-circuit. Falsy values are <code>false</code>, <code>0</code>,
+          <code>0.0</code>, <code>""</code>, <code>null</code>, and <code>undefined</code>; arrays and objects are
+          truthy.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>var total = 4;
+total += 3;
+total; // 7
+
+var copy = [...[1, 2], 3];
+copy; // [1, 2, 3]
+
+var user = {name: "Ada"};
+({role: "admin", ...user}).name; // Ada
+
+typeof missing; // undefined
+0 || "fallback"; // fallback</code></pre>
+        </div>
+      </section>
+
+      <section id="functions" class="doc-section">
+        <h2>Functions</h2>
+        <p>Declarations, expressions, named expressions, arrows, implicit returns, block bodies, recursion, default
+          parameters, rest parameters, and call-argument spread are supported. Functions are first-class and close over
+          outer variables. Non-callback user calls require every fixed parameter; rest must be last. A function without
+          <code>return</code> produces <code>undefined</code>.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>function add(left, right) {
+  return left + right;
+}
+add(20, 22); // 42
+
+var double = value =&gt; value * 2;
+double(21); // 42
+
+function collect(first, ...rest) { return rest; }
+collect(1, 2, 3); // [2, 3]
+
+function sum(a, b, c) { return a + b + c; }
+sum(...[10, 20, 12]); // 42</code></pre>
+        </div>
+      </section>
+
+      <section id="control" class="doc-section">
+        <h2>Control Flow</h2>
+        <p>Use <code>if</code>/<code>else</code>, C-style <code>for</code>, <code>for...of</code>,
+          <code>for...in</code>, <code>while</code>, <code>do...while</code>, <code>switch</code>, <code>break</code>,
+          <code>continue</code>, <code>throw</code>, <code>try</code>, <code>catch</code>, <code>finally</code>, and
+          <code>return</code>. <code>for...of</code> iterates arrays and strings; <code>for...in</code> iterates object
+          keys. Switch cases use strict matching and fall through until <code>break</code>. <code>finally</code> always
+          runs and may override a return or thrown value.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>var sum = 0;
+for (var i = 1; i &lt;= 3; i++) sum += i;
+sum; // 6
+
+var label = "";
+switch (2) {
+  case 1: label = "one"; break;
+  case 2: label = "two"; break;
+  default: label = "other";
+}
+label; // two</code></pre>
+        </div>
+      </section>
+
+      <section id="values" class="doc-section">
+        <h2>Values and Collections</h2>
+        <p>Arrays support indexing, mutable <code>length</code>, and array methods listed below. Objects support own
+          string-keyed properties, dot/bracket access, and spread. Array and object spread ignore non-array and
+          non-object values.</p>
+      </section>
+
+      <section id="global" class="doc-section">
+        <h2>Global APIs</h2>
+        <div class="api-grid">
+          <article>
+            <h3><code>console.log(...values)</code></h3>
+            <p>Writes space-separated values to stdout. Returns <code>undefined</code>.</p>
+            <pre><code>console.log("answer:", 42); // stdout: answer: 42</code></pre>
+          </article>
+          <article>
+            <h3><code>console.warn(...values)</code></h3>
+            <p>Writes to stderr. Returns <code>undefined</code>.</p>
+            <pre><code>console.warn("careful"); // stderr: careful</code></pre>
+          </article>
+          <article>
+            <h3><code>console.error(...values)</code></h3>
+            <p>Writes to stderr. Returns <code>undefined</code>.</p>
+            <pre><code>console.error("failed"); // stderr: failed</code></pre>
+          </article>
+          <article>
+            <h3><code>parseInt(value, radix?)</code></h3>
+            <p>Parses an integer prefix and returns a number or <code>NaN</code>. Radix is 0 or 2 through 36.</p>
+            <pre><code>parseInt("11", 2); // 3</code></pre>
+          </article>
+          <article>
+            <h3><code>parseFloat(value)</code></h3>
+            <p>Parses a floating-point prefix and returns a number, <code>Infinity</code>, or <code>NaN</code>.</p>
+            <pre><code>parseFloat("3.14px"); // 3.14</code></pre>
+          </article>
+          <article>
+            <h3><code>isNaN(value)</code></h3>
+            <p>Coerces to a number, then tests for <code>NaN</code>.</p>
+            <pre><code>isNaN("nope"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>readLine()</code></h3>
+            <p>Reads one stdin line without its newline. Returns <code>""</code> at EOF.</p>
+            <pre><code>readLine(); // string from stdin</code></pre>
+          </article>
+          <article>
+            <h3><code>fetch(url, options?)</code></h3>
+            <p>Performs a synchronous HTTP request. Returns <code>{status, ok, headers, text, json}</code>, not a
+              Promise.</p>
+            <pre><code>fetch("https://example.com").status; // HTTP status number</code></pre>
+            <p><code>options</code> supports <code>method</code>, <code>headers</code>, and <code>body</code>.
+              <code>text()</code> returns the body; <code>json()</code> parses it or raises an error.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="string" class="doc-section">
+        <h2>String</h2>
+        <p>Strings have a read-only <code>length</code>. Indexes are integer character indexes.</p>
+        <div class="api-table"><code>String.fromCharCode(...codeUnits)</code> builds from UTF-16 units.
+          <code>at(index)</code>, <code>charAt(index)</code>, <code>charCodeAt(index)</code>,
+          <code>codePointAt(index)</code> read characters. <code>concat(suffix)</code>, <code>startsWith(value)</code>,
+          <code>endsWith(value)</code>, <code>includes(value)</code>, <code>indexOf(value)</code>,
+          <code>lastIndexOf(value)</code> search or combine text. <code>match(pattern)</code>,
+          <code>matchAll(pattern)</code>, <code>search(pattern)</code>, <code>replace(search, replacement)</code>, and
+          <code>replaceAll(search, replacement)</code> use strings or regexes. <code>padStart(length, fill?)</code>,
+          <code>padEnd(length, fill?)</code>, <code>repeat(count)</code>, <code>slice(start, end?)</code>,
+          <code>split(separator, limit?)</code>, and <code>substring(start, end?)</code> return transformed text.
+          Casing: <code>toLowerCase()</code>, <code>toUpperCase()</code>, <code>toLocaleLowerCase()</code>,
+          <code>toLocaleUpperCase()</code>. Whitespace: <code>trim()</code>, <code>trimStart()</code>,
+          <code>trimEnd()</code>. Conversion: <code>toString()</code>, <code>valueOf()</code>,
+          <code>isWellFormed()</code>, <code>toWellFormed()</code>, <code>localeCompare(other)</code>.</div>
+        <pre><code>"GiavaScript".includes("Script"); // true
+"7".padStart(3, "0"); // 007
+"a-a".replaceAll("a", "b"); // b-b</code></pre>
+      </section>
+
+      <section id="array" class="doc-section">
+        <h2>Array</h2>
+        <p>Static APIs: <code>Array.isArray(value)</code>, <code>Array.of(...values)</code>,
+          <code>Array.from(arrayOrStringOrArrayLike)</code>. Instance APIs: <code>at(index)</code>,
+          <code>concat(...values)</code>, <code>copyWithin(target, start, end?)</code>, <code>entries()</code>,
+          <code>keys()</code>, <code>values()</code>, <code>every(fn)</code>, <code>some(fn)</code>,
+          <code>filter(fn)</code>, <code>find(fn)</code>, <code>findIndex(fn)</code>, <code>findLast(fn)</code>,
+          <code>findLastIndex(fn)</code>, <code>fill(value, start?, end?)</code>, <code>flat(depth?)</code>,
+          <code>flatMap(fn)</code>, <code>forEach(fn)</code>, <code>includes(value, fromIndex?)</code>,
+          <code>indexOf(value, fromIndex?)</code>, <code>lastIndexOf(value, fromIndex?)</code>,
+          <code>join(separator?)</code>, <code>map(fn)</code>, <code>pop()</code>, <code>push(...values)</code>,
+          <code>reduce(fn, initial?)</code>, <code>reduceRight(fn, initial?)</code>, <code>reverse()</code>,
+          <code>shift()</code>, <code>unshift(...values)</code>, <code>slice(start?, end?)</code>, <code>sort()</code>,
+          <code>splice(start, deleteCount?, ...items)</code>, and <code>toString()</code>. Callbacks receive
+          <code>(value, index, array)</code>; reducers receive <code>(accumulator, value, index, array)</code>. Mutating
+          methods return the array or new length; <code>forEach</code> returns <code>undefined</code>.</p>
+        <pre><code>[1, 2, 3].map(x =&gt; x * 2); // [2, 4, 6]
+[1, 2, 3].reduce((sum, x) =&gt; sum + x, 0); // 6</code></pre>
+      </section>
+
+      <section id="objects" class="doc-section">
+        <h2>Object, Number, and Boolean</h2>
+        <p><code>Object.assign(target, ...sources)</code> copies properties and returns the target.
+          <code>Object.hasOwn(object, property)</code> returns a boolean. <code>Object.keys(object)</code>,
+          <code>Object.values(object)</code>, and <code>Object.entries(object)</code> return arrays.
+          <code>object.toString()</code>, <code>number.toString()</code>, and <code>boolean.toString()</code> return
+          strings. <code>Number.isInteger(value)</code>, <code>Number.isFinite(value)</code>, and
+          <code>Number.isNaN(value)</code> return booleans; Number methods do not coerce.</p>
+        <pre><code>Object.keys({a: 1, b: 2}); // ["a", "b"]
+Number.isInteger(42); // true</code></pre>
+      </section>
+
+      <section id="math" class="doc-section">
+        <h2>Math</h2>
+        <p>Constants: <code>E</code>, <code>LN10</code>, <code>LN2</code>, <code>LOG10E</code>, <code>LOG2E</code>,
+          <code>PI</code>, <code>SQRT1_2</code>, <code>SQRT2</code>. Unary numeric methods take one number and return a
+          number: <code>abs</code>, <code>sqrt</code>, <code>acos</code>, <code>acosh</code>, <code>asin</code>,
+          <code>asinh</code>, <code>atan</code>, <code>atanh</code>, <code>cbrt</code>, <code>ceil</code>,
+          <code>clz32</code>, <code>cos</code>, <code>cosh</code>, <code>exp</code>, <code>expm1</code>,
+          <code>f16round</code>, <code>floor</code>, <code>fround</code>, <code>log</code>, <code>log10</code>,
+          <code>log1p</code>, <code>log2</code>, <code>round</code>, <code>sign</code>, <code>sin</code>,
+          <code>sinh</code>, <code>tan</code>, <code>tanh</code>, <code>trunc</code>. Also: <code>atan2(y, x)</code>,
+          <code>hypot(...values)</code>, <code>imul(left, right)</code>, <code>max(...values)</code>,
+          <code>min(...values)</code>, <code>pow(base, exponent)</code>, <code>random()</code>,
+          <code>sumPrecise(...values)</code>. Numeric arguments must be numbers. <code>hypot()</code> is <code>0</code>;
+          <code>max()</code> is <code>-Infinity</code>; <code>min()</code> is <code>Infinity</code>.</p>
+        <pre><code>Math.sqrt(9); // 3
+Math.max(3, 7, 4); // 7
+Math.pow(2, 5); // 32
+Math.imul(2, 21); // 42
+Math.random(); // pseudo-random number in [0, 1)</code></pre>
+      </section>
+
+      <section id="date" class="doc-section">
+        <h2>Date and RegExp</h2>
+        <p><code>Date.now()</code> returns the current UTC Unix timestamp. <code>new Date()</code> takes no arguments;
+          <code>date.getTime()</code> returns its timestamp and <code>date.toString()</code> returns a UTC ISO-like
+          string. Regex literals use <code>/pattern/flags</code>; flags are <code>g</code>, <code>i</code>,
+          <code>m</code>, <code>s</code>, and <code>u</code>. <code>new RegExp(patternOrRegex, flags?)</code> constructs
+          one. Properties are <code>source</code>, <code>flags</code>, <code>global</code>, <code>ignoreCase</code>,
+          <code>multiline</code>, <code>dotAll</code>, and <code>unicode</code>. <code>test(value)</code> returns a
+          boolean, <code>exec(value)</code> returns a match array or <code>null</code>, and <code>toString()</code>
+          returns literal-style text.</p>
+        <pre><code>/\d+/.test("a42"); // true
+/hello/gi.flags; // gi</code></pre>
+      </section>
+
+      <section id="json" class="doc-section">
+        <h2>JSON and Errors</h2>
+        <p><code>JSON.parse(text)</code> returns a parsed value and requires one string.
+          <code>JSON.stringify(value)</code> returns a JSON string or <code>undefined</code> and requires one argument.
+          Top-level <code>undefined</code>, functions, RegExp, and Error values return <code>undefined</code>;
+          unsupported object properties are omitted, array values become <code>null</code>, non-finite numbers become
+          <code>null</code>, and circular arrays or objects raise an error.</p>
+        <pre><code>JSON.parse('{"answer":42}').answer; // 42
+JSON.stringify({answer: 42}); // {"answer":42}
+
+var error = new TypeError("expected a number");
+error.name; // TypeError
+error.toString(); // TypeError: expected a number</code></pre>
+        <p>Constructors are <code>new Error(message?)</code>, <code>new TypeError(message?)</code>,
+          <code>new ReferenceError(message?)</code>, and <code>new SyntaxError(message?)</code>. Each has
+          <code>message</code>, <code>name</code>, <code>stack</code>, and <code>toString()</code>.</p>
+      </section>
+
+      <section id="host" class="doc-section">
+        <h2>File, Process, and Network</h2>
+        <p class="note">Host-integrated APIs depend on the machine and its permissions.</p>
+        <p><code>File.read(path)</code> returns UTF-8 text. <code>File.readLines(path)</code> returns lines with CRLF
+          normalized to LF. <code>File.write(path, content)</code> and <code>File.append(path, content)</code> return
+          <code>undefined</code>. <code>process.argv</code> is the argument array; <code>process.env</code> is a
+          read-only environment snapshot. <code>process.exit(code?)</code> exits with a numeric status, default
+          <code>0</code>. <code>process.run(command, args?)</code> synchronously returns
+          <code>{stdout, stderr, status}</code>. <code>fetch(url, options?)</code> is the synchronous HTTP API described
+          above.</p>
+        <pre><code>File.write("out.txt", "hello"); // undefined
+process.run("echo", ["hello"]).stdout; // hello followed by newline</code></pre>
+      </section>
+
+      <section id="compatibility" class="doc-section">
+        <h2>Compatibility</h2>
+        <p>GiavaScript is a curated runtime, not an ECMAScript-compliant browser or Node.js environment. These are not
+          available:</p>
+        <ul class="not-available">
+          <li><code>let</code> and <code>const</code></li>
+          <li>Browser DOM APIs</li>
+          <li><code>print()</code> and <code>len()</code></li>
+          <li><code>Array.fromAsync</code>, <code>Array.toReversed</code>, <code>Array.toSorted</code>,
+            <code>Array.toSpliced</code>, <code>Array.with</code>, <code>Array.toLocaleString</code></li>
+          <li><code>String.substr</code></li>
+        </ul>
+        <p>There are no promises or browser APIs. Use only the APIs documented here.</p>
+      </section>
+    </main>
+  </div>
+  <footer class="footer">
+    GiavaScript v0.7.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
+    <a href="../">Home</a>
+  </footer>
+  <script src="docs.js"></script>
+</body>
+
+</html>
