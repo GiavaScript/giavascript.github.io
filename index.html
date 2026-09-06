@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GiavaScript — a pragmatic JavaScript runtime</title>
-    <meta name="description" content="GiavaScript is a small, cross-platform JavaScript runtime with intentional non-standard differences.">
+    <meta name="description"
+        content="GiavaScript is a small, cross-platform JavaScript runtime with intentional non-standard differences.">
     <style>
         :root {
             --line: #d9d9d9;
@@ -201,7 +202,7 @@
             color: #444
         }
 
-        .quickstart code {
+        .quickstart p code {
             color: #b3001b;
             font-size: .94em
         }
@@ -214,6 +215,30 @@
             overflow: auto;
             font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             color: #333
+        }
+
+        pre code {
+            color: #333
+        }
+
+        .string {
+            color: #067d17
+        }
+
+        .comment {
+            color: #6a737d
+        }
+
+        .keyword {
+            color: #0033cc
+        }
+
+        .number {
+            color: #b3001b
+        }
+
+        .func {
+            color: #6f42c1
         }
 
         footer {
@@ -278,8 +303,13 @@
         <section class="quickstart">
             <h2>Quick start</h2>
             <p>Run a file with <code>gs path/to/program.js</code>, or open a REPL with <code>gs</code>.</p>
-            <pre><code>var name = "GiavaScript";
-console.log(`Hello, ${name}`); // Hello, GiavaScript</code></pre>
+            <pre><code>var greet = (name) => `Hello, ${name}`;
+var squares = [1, 2, 3, 4].map((n) => n * n);
+var total = squares.reduce((sum, n) => sum + n, 0);
+
+console.log(greet("GiavaScript")); // Hello, GiavaScript
+console.log(JSON.stringify(squares)); // [1,4,9,16]
+console.log(total); // 30</code></pre>
         </section>
     </main>
 
@@ -289,10 +319,31 @@ console.log(`Hello, ${name}`); // Hello, GiavaScript</code></pre>
     </footer>
 
     <script>
-        document.querySelector(".install .copy").addEventListener("click", function () {
-            navigator.clipboard.writeText(this.parentElement.querySelector("code").textContent);
-            this.textContent = "Copied";
-            setTimeout(function (btn) { btn.textContent = "Copy"; }, 1200, this);
+        var tokenPattern = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\/\/[^\n]*)|\b(var|function|return|if|else|for|of|in|switch|case|break|default|new|typeof|throw|try|catch|finally)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\()/g;
+
+        var highlight = (source) => {
+            var escaped = source.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return escaped.replace(tokenPattern, (match, string, comment, keyword, number, func) => {
+                if (string) return `<span class="string">${match}</span>`;
+                if (comment) return `<span class="comment">${match}</span>`;
+                if (keyword) return `<span class="keyword">${match}</span>`;
+                if (number) return `<span class="number">${match}</span>`;
+                return `<span class="func">${match}</span>`;
+            });
+        };
+
+        var copy = (button, timeout = 1200) => {
+            navigator.clipboard.writeText(button.parentElement.querySelector("code").textContent);
+            button.textContent = "Copied";
+            setTimeout(() => { button.textContent = "Copy"; }, timeout);
+        };
+
+        [...document.querySelectorAll("pre code")].forEach((block) => {
+            block.innerHTML = highlight(block.textContent);
+        });
+
+        [...document.querySelectorAll(".copy")].forEach((button) => {
+            button.addEventListener("click", () => copy(button));
         });
     </script>
 </body>
