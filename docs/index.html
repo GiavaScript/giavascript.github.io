@@ -914,7 +914,10 @@ d.getTime(); // timestamp number</code></pre>
 error.name; // TypeError
 error.toString(); // TypeError: expected a number</code></pre>
             <p>Error objects can be thrown with <code>throw</code> and caught with <code>try</code>/<code>catch</code>.
-              Raw values can also be thrown.</p>
+              Raw values can also be thrown. An uncaught throw is reported with its value and a source location
+              (<code>file:line:column</code>). When the throw propagates out of user functions, the report also lists
+              the calling frames as <code>at name</code> lines; anonymous functions appear as <code>at anonymous</code>.
+            </p>
           </article>
         </div>
       </section>
