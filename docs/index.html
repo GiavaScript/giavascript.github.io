@@ -72,11 +72,14 @@ console.log(`Hello, ${name}`); // stdout: Hello, GiavaScript</code></pre>
           regular expressions, and errors. Property access uses dot or brackets. Statements on separate lines do not
           need semicolons. Local files can be evaluated with <code>import "path/to/file.js"</code>.</p>
         <p>Supported operators include arithmetic, bitwise, comparisons, strict and coercive equality, logical
-          operators, ternaries, unary <code>+</code>, <code>typeof</code>, and <code>void</code>.
+          operators, optional chaining (<code>?.</code>, <code>?.[]</code>, <code>?.()</code>), nullish coalescing
+          (<code>??</code>), ternaries, unary <code>+</code>, <code>typeof</code>, and <code>void</code>.
           <code>==</code>/<code>!=</code> coerce; <code>===</code>/<code>!==</code> do not. <code>&amp;&amp;</code> and
-          <code>||</code> return an operand and short-circuit. Falsy values are <code>false</code>, <code>0</code>,
-          <code>0.0</code>, <code>""</code>, <code>null</code>, and <code>undefined</code>; arrays and objects are
-          truthy.</p>
+          <code>||</code> return an operand and short-circuit. <code>?.</code> yields <code>undefined</code> when the
+          target is <code>null</code> or <code>undefined</code>; <code>??</code> falls back only for those two values,
+          keeping <code>0</code>, <code>""</code>, and <code>false</code>. Falsy values are <code>false</code>,
+          <code>0</code>, <code>0.0</code>, <code>""</code>, <code>null</code>, and <code>undefined</code>; arrays and
+          objects are truthy.</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>var total = 4;
 total += 3;
@@ -89,7 +92,14 @@ var user = {name: "Ada"};
 ({role: "admin", ...user}).name; // Ada
 
 typeof missing; // undefined
-0 || "fallback"; // fallback</code></pre>
+0 || "fallback"; // fallback
+
+var settings = null;
+settings?.theme; // undefined
+
+var count = 0;
+count ?? 5; // 0
+null ?? 5; // 5</code></pre>
         </div>
       </section>
 
