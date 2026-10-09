@@ -27,11 +27,11 @@
         <a href="#global">Global APIs</a>
         <a href="#string">String</a>
         <a href="#array">Array</a>
-        <a href="#objects">Object, Number, Boolean</a>
+        <a href="#objects">Object, Number, and Boolean</a>
         <a href="#math">Math</a>
         <a href="#date">Date and RegExp</a>
         <a href="#json">JSON and Errors</a>
-        <a href="#host">File, Process, Network</a>
+        <a href="#host">File, Process, and Network</a>
         <a href="#compatibility">Compatibility</a>
       </nav>
     </aside>
@@ -39,15 +39,16 @@
       <div class="intro">
         <p class="eyebrow">Reference</p>
         <h1>GiavaScript documentation</h1>
-        <p>GiavaScript is a small, cross-platform JavaScript runtime. It implements a curated subset of JavaScript, so
-          this reference describes GiavaScript behavior only.</p>
+        <p>GiavaScript is an open-source, cross-platform JavaScript runtime. It implements a curated subset of
+          JavaScript and is not ECMAScript-compliant, so this reference describes GiavaScript behavior only.</p>
       </div>
       <aside class="toc" aria-label="On this page"><strong>On this page</strong><a href="#start">Start here</a><a
           href="#language">Language</a><a href="#global">APIs</a><a href="#compatibility">Compatibility</a></aside>
 
+      <!-- Getting Started -->
       <section id="start" class="doc-section">
         <h2>Getting Started</h2>
-        <p>Install with Homebrew on macOS or Linux:</p>
+        <p>Install GiavaScript with Homebrew on macOS or Linux:</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>brew tap GiavaScript/giavascript &amp;&amp; brew install giavascript</code></pre>
         </div>
@@ -56,27 +57,56 @@
           <pre><code>brew update &amp;&amp; brew upgrade giavascript</code></pre>
         </div>
         <p>Run a file with <code>gs path/to/program.js</code>, or start the REPL with <code>gs</code>. Leave the REPL
-          with <code>:quit</code>. An empty file is an error. Errors go to standard error with their source location
-          (<code>file:line:column</code>), the offending source line, and a caret. An error gives the CLI an exit
-          status of <code>1</code>.</p>
+          with <code>:quit</code>. An empty file is an error. Runtime errors are written to standard error with their
+          source location (<code>file:line:column</code>), the offending source line, and a caret. Any <code>Error:</code>
+          message gives the CLI an exit status of <code>1</code>.</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>var name = "GiavaScript";
 console.log(`Hello, ${name}`); // stdout: Hello, GiavaScript</code></pre>
         </div>
       </section>
 
+      <!-- Language Basics -->
       <section id="language" class="doc-section">
         <h2>Language Basics</h2>
-        <p>Use <code>var</code> declarations, assignment, compound assignment, postfix <code>++</code>/<code>--</code>,
-          numbers, strings, booleans, <code>null</code>, <code>undefined</code>, arrays, objects, functions, dates,
-          regular expressions, and errors. Property access uses dot or brackets. Statements on separate lines do not
-          need semicolons. Local files can be evaluated with <code>import "path/to/file.js"</code>.</p>
-        <p>Supported operators include arithmetic, bitwise, comparisons, strict and coercive equality, logical
-          operators, ternaries, unary <code>+</code>, <code>typeof</code>, and <code>void</code>.
-          <code>==</code>/<code>!=</code> coerce; <code>===</code>/<code>!==</code> do not. <code>&amp;&amp;</code> and
-          <code>||</code> return an operand and short-circuit. Falsy values are <code>false</code>, <code>0</code>,
-          <code>0.0</code>, <code>""</code>, <code>null</code>, and <code>undefined</code>; arrays and objects are
-          truthy.</p>
+        <p>Declare variables with <code>var</code>, <code>let</code>, or <code>const</code>. All three are
+          function/global scoped; there is no block scoping. <code>let</code> behaves like <code>var</code>.
+          <code>const</code> requires an initializer and cannot be reassigned or updated.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>var a = 1;
+let b;
+b = 2;
+const c = 3; // c = 4 would raise an error
+a += 1; // 2
+b++; // 3</code></pre>
+        </div>
+        <p>Values are numbers, strings (single or double quotes), <code>true</code>, <code>false</code>,
+          <code>null</code>, <code>undefined</code>, arrays, objects, functions, dates, regular expressions, and
+          errors. Access properties with <code>object.key</code> or <code>object["key"]</code>, and index arrays with
+          <code>items[0]</code>. Arrays and objects support spread (<code>[...items]</code>, <code>{...source}</code>);
+          non-array and non-object spread values are ignored. Comments are <code>// line</code> and
+          <code>/* block */</code>. Template literals interpolate with <code>${...}</code>. Statements on separate
+          lines do not need semicolons. A local file can be evaluated with <code>import "path/to/file.js"</code>.</p>
+        <p>Supported operators include arithmetic <code>+ - * / %</code>, bitwise <code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code>,
+          comparisons <code>&lt; &gt; &lt;= &gt;=</code>, equality <code>== != === !==</code>, logical
+          <code>&amp;&amp; || !</code>, optional chaining <code>?.</code> (<code>a?.b</code>, <code>a?.[i]</code>,
+          <code>a?.(args)</code>), nullish coalescing <code>??</code>, ternary
+          <code>condition ? left : right</code>, unary <code>+</code>, <code>typeof</code>, and <code>void</code>.</p>
+        <ul>
+          <li><code>==</code> and <code>!=</code> coerce; <code>===</code> and <code>!==</code> do not.
+            <code>switch</code> also uses strict matching.</li>
+          <li><code>&amp;&amp;</code> and <code>||</code> short-circuit and return an operand, not necessarily a
+            boolean.</li>
+          <li><code>?.</code> short-circuits to <code>undefined</code> when the target is <code>null</code> or
+            <code>undefined</code> instead of raising. <code>??</code> falls back only for those two values, keeping
+            <code>0</code>, <code>""</code>, and <code>false</code>. <code>??</code> binds looser than
+            <code>&amp;&amp;</code> and <code>||</code>.</li>
+          <li>Falsy values are <code>false</code>, <code>0</code>, <code>0.0</code>, <code>""</code>,
+            <code>null</code>, and <code>undefined</code>. Arrays and objects are truthy.</li>
+          <li><code>typeof</code> returns <code>"number"</code>, <code>"string"</code>, <code>"boolean"</code>,
+            <code>"object"</code>, <code>"function"</code>, or <code>"undefined"</code>. An undeclared identifier
+            returns <code>"undefined"</code> under <code>typeof</code>.</li>
+        </ul>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>var total = 4;
 total += 3;
@@ -89,16 +119,24 @@ var user = {name: "Ada"};
 ({role: "admin", ...user}).name; // Ada
 
 typeof missing; // undefined
-0 || "fallback"; // fallback</code></pre>
+0 || "fallback"; // fallback
+
+var settings = null;
+settings?.theme; // undefined
+
+var count = 0;
+count ?? 5; // 0
+null ?? 5; // 5</code></pre>
         </div>
       </section>
 
+      <!-- Functions -->
       <section id="functions" class="doc-section">
         <h2>Functions</h2>
-        <p>Declarations, expressions, named expressions, arrows, implicit returns, block bodies, recursion, default
-          parameters, rest parameters, and call-argument spread are supported. Functions are first-class and close over
-          outer variables. Non-callback user calls require every fixed parameter; rest must be last. A function without
-          <code>return</code> produces <code>undefined</code>.</p>
+        <p>Function declarations, expressions, named expressions, arrows (with implicit or block bodies), recursion,
+          default parameters, rest parameters, and call-argument spread are supported. Functions are first-class values
+          and close over outer variables. Non-callback user function calls require every declared fixed parameter, rest
+          must be the last parameter, and a function without <code>return</code> produces <code>undefined</code>.</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>function add(left, right) {
   return left + right;
@@ -108,7 +146,9 @@ add(20, 22); // 42
 var double = value =&gt; value * 2;
 double(21); // 42
 
-function collect(first, ...rest) { return rest; }
+function collect(first, ...rest) {
+  return rest;
+}
 collect(1, 2, 3); // [2, 3]
 
 function sum(a, b, c) { return a + b + c; }
@@ -116,18 +156,50 @@ sum(...[10, 20, 12]); // 42</code></pre>
         </div>
       </section>
 
+      <!-- Control Flow -->
       <section id="control" class="doc-section">
         <h2>Control Flow</h2>
-        <p>Use <code>if</code>/<code>else</code>, C-style <code>for</code>, <code>for...of</code>,
-          <code>for...in</code>, <code>while</code>, <code>do...while</code>, <code>switch</code>, <code>break</code>,
-          <code>continue</code>, <code>throw</code>, <code>try</code>, <code>catch</code>, <code>finally</code>, and
-          <code>return</code>. <code>for...of</code> iterates arrays and strings; <code>for...in</code> iterates object
-          keys. Switch cases use strict matching and fall through until <code>break</code>. <code>finally</code> always
-          runs and may override a return or thrown value.</p>
+        <p>Use <code>if</code>/<code>else if</code>/<code>else</code>, C-style <code>for</code>,
+          <code>for...of</code>, <code>for...in</code>, <code>while</code>, <code>do...while</code>,
+          <code>switch</code>, <code>break</code>, <code>continue</code>, <code>throw</code>,
+          <code>try</code>/<code>catch</code>/<code>finally</code>, and <code>return</code>.
+          <code>for...of</code> iterates arrays, strings, and Map/Set values; <code>for...in</code> iterates object
+          keys. <code>break</code> is valid in loops and <code>switch</code>; <code>continue</code> only in loops.
+          Switch cases use strict matching and fall through until <code>break</code>. <code>finally</code> always runs
+          and may override a return or thrown value.</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
-          <pre><code>var sum = 0;
-for (var i = 1; i &lt;= 3; i++) sum += i;
+          <pre><code>var grade = 82;
+if (grade &gt;= 90) {
+  "A";
+} else if (grade &gt;= 80) {
+  "B"; // B
+} else {
+  "C";
+}
+
+var sum = 0;
+for (var i = 1; i &lt;= 3; i++) {
+  sum += i;
+}
 sum; // 6
+
+var letters = "";
+for (var letter of ["a", "b", "c"]) {
+  letters += letter;
+}
+letters; // abc
+
+var keys = "";
+for (var key in {a: 1, b: 2}) {
+  keys += key;
+}
+keys; // ab
+
+var count = 0;
+do {
+  count++;
+} while (count &lt; 1);
+count; // 1
 
 var label = "";
 switch (2) {
@@ -135,17 +207,163 @@ switch (2) {
   case 2: label = "two"; break;
   default: label = "other";
 }
-label; // two</code></pre>
+label; // two
+
+try {
+  throw new Error("bad input");
+} catch (error) {
+  error.message; // bad input
+} finally {
+  // always runs
+}</code></pre>
         </div>
       </section>
 
+      <!-- Values and Collections -->
       <section id="values" class="doc-section">
         <h2>Values and Collections</h2>
-        <p>Arrays support indexing, mutable <code>length</code>, and array methods listed below. Objects support own
-          string-keyed properties, dot/bracket access, and spread. Array and object spread ignore non-array and
-          non-object values.</p>
+        <p>Arrays support indexing, a mutable <code>length</code>, and the methods in the <a href="#array">Array</a>
+          section. Objects support own string-keyed properties, dot and bracket access, and spread. Array and object
+          spread ignore non-array and non-object values.</p>
+        <p><code>Map</code> and <code>Set</code> are keyed collections that compare keys with SameValueZero semantics:
+          numbers compare by value (<code>1</code> and <code>1.0</code> are the same key, and <code>NaN</code> equals
+          itself), strings, booleans, <code>null</code>, and <code>undefined</code> compare by value, and objects
+          compare by reference identity. Iteration uses insertion order. Both are iterable with <code>for...of</code>:
+          a Map yields <code>[key, value]</code> pairs and a Set yields values.</p>
+        <div class="api-grid">
+          <article>
+            <h3><code>new Map()</code></h3>
+            <p>Creates an empty keyed collection. Returns a <code>Map</code>. Takes no arguments.</p>
+            <pre><code>var m = new Map();
+m.size; // 0</code></pre>
+          </article>
+          <article>
+            <h3><code>map.set(key, value)</code></h3>
+            <p>Stores a value under a key. Returns <code>map</code> for chaining.</p>
+            <pre><code>var m = new Map();
+m.set("a", 1);
+m.get("a"); // 1</code></pre>
+          </article>
+          <article>
+            <h3><code>map.get(key)</code></h3>
+            <p>Returns the value for a key, or <code>undefined</code> when absent.</p>
+            <pre><code>var m = new Map(); m.set(1, "one");
+m.get(1); // "one"
+m.get(1.0); // "one"</code></pre>
+          </article>
+          <article>
+            <h3><code>map.has(key)</code></h3>
+            <p>Returns a boolean indicating whether the key exists.</p>
+            <pre><code>var m = new Map(); m.set("a", 1);
+m.has("a"); // true
+m.has("b"); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>map.delete(key)</code></h3>
+            <p>Removes a key. Returns <code>true</code> if it existed, otherwise <code>false</code>.</p>
+            <pre><code>var m = new Map(); m.set("a", 1);
+m.delete("a"); // true
+m.delete("a"); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>map.clear()</code></h3>
+            <p>Removes every entry. Returns <code>undefined</code>.</p>
+            <pre><code>var m = new Map(); m.set("a", 1);
+m.clear();
+m.size; // 0</code></pre>
+          </article>
+          <article>
+            <h3><code>map.keys(), map.values(), map.entries()</code></h3>
+            <p>Return new arrays of keys, values, or <code>[key, value]</code> pairs.</p>
+            <pre><code>var m = new Map(); m.set("a", 1); m.set("b", 2);
+m.keys(); // ["a", "b"]
+m.values(); // [1, 2]
+m.entries(); // [["a", 1], ["b", 2]]</code></pre>
+          </article>
+          <article>
+            <h3><code>map.forEach(callback)</code></h3>
+            <p>Runs <code>callback(value, key, map)</code> for each entry. Returns <code>undefined</code>.</p>
+            <pre><code>var m = new Map(); m.set("a", 1);
+m.forEach(function(value, key) { console.log(key + "=" + value); }); // stdout: a=1</code></pre>
+          </article>
+          <article>
+            <h3><code>map.size</code></h3>
+            <p>Read-only number of entries in the Map.</p>
+            <pre><code>var m = new Map(); m.set("a", 1); m.set("b", 2);
+m.size; // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>for...of</code> over a Map</h3>
+            <p>Yields each entry as a <code>[key, value]</code> array.</p>
+            <pre><code>var m = new Map(); m.set("a", 1); m.set("b", 2);
+var out = [];
+for (var pair of m) { out.push(pair[0] + pair[1]); }
+out; // ["a1", "b2"]</code></pre>
+          </article>
+          <article>
+            <h3><code>new Set()</code></h3>
+            <p>Creates an empty collection of unique values. Returns a <code>Set</code>. Takes no arguments.</p>
+            <pre><code>var s = new Set();
+s.size; // 0</code></pre>
+          </article>
+          <article>
+            <h3><code>set.add(value)</code></h3>
+            <p>Adds a value if absent. Returns <code>set</code> for chaining.</p>
+            <pre><code>var s = new Set();
+s.add(1); s.add(1);
+s.size; // 1</code></pre>
+          </article>
+          <article>
+            <h3><code>set.has(value)</code></h3>
+            <p>Returns a boolean indicating whether the value exists.</p>
+            <pre><code>var s = new Set(); s.add(2);
+s.has(2); // true
+s.has(3); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>set.delete(value)</code></h3>
+            <p>Removes a value. Returns <code>true</code> if it existed, otherwise <code>false</code>.</p>
+            <pre><code>var s = new Set(); s.add(1);
+s.delete(1); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>set.clear()</code></h3>
+            <p>Removes every value. Returns <code>undefined</code>.</p>
+            <pre><code>var s = new Set(); s.add(1);
+s.clear();
+s.size; // 0</code></pre>
+          </article>
+          <article>
+            <h3><code>set.values(), set.entries()</code></h3>
+            <p>Return new arrays of values, or <code>[value, value]</code> pairs.</p>
+            <pre><code>var s = new Set(); s.add(1); s.add(2);
+s.values(); // [1, 2]
+s.entries(); // [[1, 1], [2, 2]]</code></pre>
+          </article>
+          <article>
+            <h3><code>set.forEach(callback)</code></h3>
+            <p>Runs <code>callback(value, value, set)</code> for each value. Returns <code>undefined</code>.</p>
+            <pre><code>var s = new Set(); s.add(1);
+s.forEach(function(value) { console.log(value); }); // stdout: 1</code></pre>
+          </article>
+          <article>
+            <h3><code>set.size</code></h3>
+            <p>Read-only number of values in the Set.</p>
+            <pre><code>var s = new Set(); s.add(1); s.add(2);
+s.size; // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>for...of</code> over a Set</h3>
+            <p>Yields each stored value.</p>
+            <pre><code>var s = new Set(); s.add(3); s.add(4);
+var out = [];
+for (var value of s) { out.push(value); }
+out; // [3, 4]</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Global APIs -->
       <section id="global" class="doc-section">
         <h2>Global APIs</h2>
         <div class="api-grid">
@@ -156,171 +374,615 @@ label; // two</code></pre>
           </article>
           <article>
             <h3><code>console.warn(...values)</code></h3>
-            <p>Writes to stderr. Returns <code>undefined</code>.</p>
+            <p>Writes space-separated values to stderr. Returns <code>undefined</code>.</p>
             <pre><code>console.warn("careful"); // stderr: careful</code></pre>
           </article>
           <article>
             <h3><code>console.error(...values)</code></h3>
-            <p>Writes to stderr. Returns <code>undefined</code>.</p>
+            <p>Writes space-separated values to stderr. Returns <code>undefined</code>.</p>
             <pre><code>console.error("failed"); // stderr: failed</code></pre>
           </article>
           <article>
             <h3><code>parseInt(value, radix?)</code></h3>
-            <p>Parses an integer prefix and returns a number or <code>NaN</code>. Radix is 0 or 2 through 36.</p>
-            <pre><code>parseInt("11", 2); // 3</code></pre>
+            <p>Parses an integer prefix. Returns a number, or <code>NaN</code> when there is no valid digit. Radix must
+              be <code>0</code> or between <code>2</code> and <code>36</code>.</p>
+            <pre><code>parseInt("11", 2); // 3
+parseInt("nope"); // NaN</code></pre>
           </article>
           <article>
             <h3><code>parseFloat(value)</code></h3>
-            <p>Parses a floating-point prefix and returns a number, <code>Infinity</code>, or <code>NaN</code>.</p>
+            <p>Parses a floating-point prefix. Returns a number, <code>Infinity</code>, or <code>NaN</code>.</p>
             <pre><code>parseFloat("3.14px"); // 3.14</code></pre>
           </article>
           <article>
             <h3><code>isNaN(value)</code></h3>
-            <p>Coerces to a number, then tests for <code>NaN</code>.</p>
-            <pre><code>isNaN("nope"); // true</code></pre>
+            <p>Coerces a value to a number, then reports whether it is <code>NaN</code>. Returns a boolean.</p>
+            <pre><code>isNaN("nope"); // true
+isNaN(42); // false</code></pre>
           </article>
           <article>
             <h3><code>readLine()</code></h3>
-            <p>Reads one stdin line without its newline. Returns <code>""</code> at EOF.</p>
-            <pre><code>readLine(); // string from stdin</code></pre>
+            <p>Reads one standard-input line without its newline. Returns the line as a string, or <code>""</code> at
+              EOF. Result depends on input.</p>
+            <pre><code>readLine(); // string from stdin, or "" at EOF</code></pre>
           </article>
           <article>
             <h3><code>fetch(url, options?)</code></h3>
-            <p>Performs a synchronous HTTP request. Returns <code>{status, ok, headers, text, json}</code>, not a
-              Promise.</p>
+            <p>Performs a synchronous HTTP request. Returns an object with <code>status</code>, <code>ok</code>,
+              <code>headers</code>, <code>text</code>, and <code>json</code>. It does not return a Promise.</p>
             <pre><code>fetch("https://example.com").status; // HTTP status number</code></pre>
             <p><code>options</code> supports <code>method</code>, <code>headers</code>, and <code>body</code>.
-              <code>text()</code> returns the body; <code>json()</code> parses it or raises an error.</p>
+              <code>response.text()</code> returns the body string. <code>response.json()</code> parses the body or
+              raises an error when it is not valid JSON. Network results depend on the host.</p>
           </article>
         </div>
       </section>
 
+      <!-- String -->
       <section id="string" class="doc-section">
         <h2>String</h2>
-        <p>Strings have a read-only <code>length</code>. Indexes are integer character indexes.</p>
-        <div class="api-table"><code>String.fromCharCode(...codeUnits)</code> builds from UTF-16 units.
-          <code>at(index)</code>, <code>charAt(index)</code>, <code>charCodeAt(index)</code>,
-          <code>codePointAt(index)</code> read characters. <code>concat(suffix)</code>, <code>startsWith(value)</code>,
-          <code>endsWith(value)</code>, <code>includes(value)</code>, <code>indexOf(value)</code>,
-          <code>lastIndexOf(value)</code> search or combine text. <code>match(pattern)</code>,
-          <code>matchAll(pattern)</code>, <code>search(pattern)</code>, <code>replace(search, replacement)</code>, and
-          <code>replaceAll(search, replacement)</code> use strings or regexes. <code>padStart(length, fill?)</code>,
-          <code>padEnd(length, fill?)</code>, <code>repeat(count)</code>, <code>slice(start, end?)</code>,
-          <code>split(separator, limit?)</code>, and <code>substring(start, end?)</code> return transformed text.
-          Casing: <code>toLowerCase()</code>, <code>toUpperCase()</code>, <code>toLocaleLowerCase()</code>,
-          <code>toLocaleUpperCase()</code>. Whitespace: <code>trim()</code>, <code>trimStart()</code>,
-          <code>trimEnd()</code>. Conversion: <code>toString()</code>, <code>valueOf()</code>,
-          <code>isWellFormed()</code>, <code>toWellFormed()</code>, <code>localeCompare(other)</code>.</div>
-        <pre><code>"GiavaScript".includes("Script"); // true
-"7".padStart(3, "0"); // 007
-"a-a".replaceAll("a", "b"); // b-b</code></pre>
+        <p>Strings are immutable. Indexes are integer character indexes. The <code>length</code> property is read-only.
+        </p>
+        <div class="api-grid">
+          <article>
+            <h3><code>String.fromCharCode(...codeUnits)</code></h3>
+            <p>Builds a string from UTF-16 code units. Returns a string.</p>
+            <pre><code>String.fromCharCode(65, 66); // AB</code></pre>
+          </article>
+          <article>
+            <h3><code>text.length</code></h3>
+            <p>Read-only number of characters in the string.</p>
+            <pre><code>"hello".length; // 5</code></pre>
+          </article>
+          <article>
+            <h3><code>text.at(index)</code></h3>
+            <p>Returns the character at an index, supporting negative indexes, or <code>undefined</code> when outside
+              the string.</p>
+            <pre><code>"abc".at(-1); // c
+"abc".at(9); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>text.charAt(index)</code></h3>
+            <p>Returns the character at an index, or <code>""</code> when outside the string.</p>
+            <pre><code>"abc".charAt(1); // b</code></pre>
+          </article>
+          <article>
+            <h3><code>text.charCodeAt(index)</code></h3>
+            <p>Returns the character code at an index, or <code>NaN</code> when outside the string.</p>
+            <pre><code>"A".charCodeAt(0); // 65</code></pre>
+          </article>
+          <article>
+            <h3><code>text.codePointAt(index)</code></h3>
+            <p>Returns the Unicode code point at an index, or <code>undefined</code> when outside the string.</p>
+            <pre><code>"A".codePointAt(0); // 65</code></pre>
+          </article>
+          <article>
+            <h3><code>text.concat(suffix)</code></h3>
+            <p>Returns the text with one string suffix appended.</p>
+            <pre><code>"Giava".concat("Script"); // GiavaScript</code></pre>
+          </article>
+          <article>
+            <h3><code>text.startsWith(value), text.endsWith(value), text.includes(value)</code></h3>
+            <p>Test for a string prefix, suffix, or contained string. Each returns a boolean.</p>
+            <pre><code>"GiavaScript".startsWith("Giava"); // true
+"GiavaScript".endsWith("Script"); // true
+"GiavaScript".includes("aSc"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>text.indexOf(value), text.lastIndexOf(value)</code></h3>
+            <p>Return the first or last index of a substring, or <code>-1</code> when absent.</p>
+            <pre><code>"banana".indexOf("a"); // 1
+"banana".lastIndexOf("a"); // 5</code></pre>
+          </article>
+          <article>
+            <h3><code>text.isWellFormed(), text.toWellFormed()</code></h3>
+            <p>Return <code>true</code>, and the unchanged string, respectively. GiavaScript strings are always well
+              formed.</p>
+            <pre><code>"text".isWellFormed(); // true
+"text".toWellFormed(); // text</code></pre>
+          </article>
+          <article>
+            <h3><code>text.localeCompare(other)</code></h3>
+            <p>Compares strings lexically. Returns <code>-1</code>, <code>0</code>, or <code>1</code>.</p>
+            <pre><code>"a".localeCompare("b"); // -1</code></pre>
+          </article>
+          <article>
+            <h3><code>text.match(pattern)</code></h3>
+            <p>Returns a match array or <code>null</code>. A global regular expression returns all whole matches.</p>
+            <pre><code>"hello".match(/he(.)l/); // ["hell", "l"]</code></pre>
+          </article>
+          <article>
+            <h3><code>text.matchAll(pattern)</code></h3>
+            <p>Returns an array of all matches. Regex matches include capture groups.</p>
+            <pre><code>"a-a".matchAll("a"); // ["a", "a"]</code></pre>
+          </article>
+          <article>
+            <h3><code>text.padStart(length, fill?), text.padEnd(length, fill?)</code></h3>
+            <p>Pad the string to a length using <code>fill</code>, or a single space when omitted. Returns a string.</p>
+            <pre><code>"7".padStart(3, "0"); // 007
+"7".padEnd(3, "0"); // 700</code></pre>
+          </article>
+          <article>
+            <h3><code>text.replace(search, replacement)</code></h3>
+            <p>Replaces the first match, or all matches when the pattern is a global regular expression. Returns a
+              string.</p>
+            <pre><code>"a-a".replace("a", "b"); // b-a
+"a-a".replace(/a/g, "b"); // b-b</code></pre>
+          </article>
+          <article>
+            <h3><code>text.replaceAll(search, replacement)</code></h3>
+            <p>Replaces every string or regex match. Returns a string.</p>
+            <pre><code>"a-a".replaceAll("a", "b"); // b-b</code></pre>
+          </article>
+          <article>
+            <h3><code>text.repeat(count)</code></h3>
+            <p>Repeats the string a non-negative integer number of times. Returns a string.</p>
+            <pre><code>"ha".repeat(2); // haha</code></pre>
+          </article>
+          <article>
+            <h3><code>text.search(pattern)</code></h3>
+            <p>Returns the index of the first match, or <code>-1</code>.</p>
+            <pre><code>"hello".search(/ll/); // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>text.slice(start, end?)</code></h3>
+            <p>Returns characters in <code>[start, end)</code>. Negative indexes count from the end.</p>
+            <pre><code>"hello".slice(-3); // llo
+"hello".slice(1, 3); // el</code></pre>
+          </article>
+          <article>
+            <h3><code>text.split(separator, limit?)</code></h3>
+            <p>Splits by a string or regular expression. Returns an array, optionally capped by <code>limit</code>.</p>
+            <pre><code>"a,b,c".split(","); // ["a", "b", "c"]
+"a,b,c".split(",", 2); // ["a", "b"]</code></pre>
+          </article>
+          <article>
+            <h3><code>text.substring(start, end?)</code></h3>
+            <p>Returns characters in <code>[start, end)</code>. Negative indexes become <code>0</code>, and reversed
+              bounds swap.</p>
+            <pre><code>"hello".substring(1, 3); // el
+"hello".substring(4, 1); // ell</code></pre>
+          </article>
+          <article>
+            <h3><code>text.toLowerCase(), text.toUpperCase(), text.toLocaleLowerCase(), text.toLocaleUpperCase()</code></h3>
+            <p>Return a case-converted string.</p>
+            <pre><code>"Giava".toUpperCase(); // GIAVA
+"Giava".toLowerCase(); // giava</code></pre>
+          </article>
+          <article>
+            <h3><code>text.trim(), text.trimStart(), text.trimEnd()</code></h3>
+            <p>Return the string with leading, trailing, or both ends of whitespace removed.</p>
+            <pre><code>"  hi  ".trim(); // hi
+"  hi  ".trimStart(); // "hi  "</code></pre>
+          </article>
+          <article>
+            <h3><code>text.toString(), text.valueOf()</code></h3>
+            <p>Return the unchanged string.</p>
+            <pre><code>"text".valueOf(); // text</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Array -->
       <section id="array" class="doc-section">
         <h2>Array</h2>
-        <p>Static APIs: <code>Array.isArray(value)</code>, <code>Array.of(...values)</code>,
-          <code>Array.from(arrayOrStringOrArrayLike)</code>. Instance APIs: <code>at(index)</code>,
-          <code>concat(...values)</code>, <code>copyWithin(target, start, end?)</code>, <code>entries()</code>,
-          <code>keys()</code>, <code>values()</code>, <code>every(fn)</code>, <code>some(fn)</code>,
-          <code>filter(fn)</code>, <code>find(fn)</code>, <code>findIndex(fn)</code>, <code>findLast(fn)</code>,
-          <code>findLastIndex(fn)</code>, <code>fill(value, start?, end?)</code>, <code>flat(depth?)</code>,
-          <code>flatMap(fn)</code>, <code>forEach(fn)</code>, <code>includes(value, fromIndex?)</code>,
-          <code>indexOf(value, fromIndex?)</code>, <code>lastIndexOf(value, fromIndex?)</code>,
-          <code>join(separator?)</code>, <code>map(fn)</code>, <code>pop()</code>, <code>push(...values)</code>,
-          <code>reduce(fn, initial?)</code>, <code>reduceRight(fn, initial?)</code>, <code>reverse()</code>,
-          <code>shift()</code>, <code>unshift(...values)</code>, <code>slice(start?, end?)</code>, <code>sort()</code>,
-          <code>splice(start, deleteCount?, ...items)</code>, and <code>toString()</code>. Callbacks receive
-          <code>(value, index, array)</code>; reducers receive <code>(accumulator, value, index, array)</code>. Mutating
-          methods return the array or new length; <code>forEach</code> returns <code>undefined</code>.</p>
-        <pre><code>[1, 2, 3].map(x =&gt; x * 2); // [2, 4, 6]
-[1, 2, 3].reduce((sum, x) =&gt; sum + x, 0); // 6</code></pre>
+        <p>Arrays have a mutable <code>length</code>. Callbacks receive <code>(value, index, array)</code>; reducers
+          receive <code>(accumulator, value, index, array)</code>. Mutating methods usually return the array or the new
+          length.</p>
+        <div class="api-grid">
+          <article>
+            <h3><code>Array.isArray(value)</code></h3>
+            <p>Returns a boolean indicating whether the value is an array.</p>
+            <pre><code>Array.isArray([]); // true
+Array.isArray({}); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>Array.of(...values)</code></h3>
+            <p>Creates a new array from all arguments. Returns an array.</p>
+            <pre><code>Array.of(1, 2); // [1, 2]</code></pre>
+          </article>
+          <article>
+            <h3><code>Array.from(arrayOrStringOrArrayLike)</code></h3>
+            <p>Returns a shallow array copy, the characters of a string, or values from an object with an integer
+              <code>length</code>.</p>
+            <pre><code>Array.from("ab"); // ["a", "b"]
+Array.from({length: 2, "0": "x", "1": "y"}); // ["x", "y"]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.length</code></h3>
+            <p>Read-write number of elements. Assigning changes the array size.</p>
+            <pre><code>var a = [1, 2];
+a.length; // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>items.at(index)</code></h3>
+            <p>Returns the item at an index, supporting negative indexes, or <code>undefined</code> out of bounds.</p>
+            <pre><code>[10, 20].at(-1); // 20</code></pre>
+          </article>
+          <article>
+            <h3><code>items.concat(...values)</code></h3>
+            <p>Returns a new array with arguments appended; array arguments are flattened one level.</p>
+            <pre><code>[1].concat([2], 3); // [1, 2, 3]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.copyWithin(target, start, end?)</code></h3>
+            <p>Copies a range within the array in place. Returns the array.</p>
+            <pre><code>var a = [1, 2, 3];
+a.copyWithin(1, 0); // [1, 1, 2]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.entries(), items.keys(), items.values()</code></h3>
+            <p>Return new arrays of <code>[index, value]</code> pairs, indexes, or values.</p>
+            <pre><code>["a", "b"].entries(); // [[0, "a"], [1, "b"]]
+["a", "b"].keys(); // [0, 1]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.every(fn), items.some(fn)</code></h3>
+            <p>Return whether all, or any, callback results are truthy.</p>
+            <pre><code>[1, 2].every(x =&gt; x &gt; 0); // true
+[1, 2].some(x =&gt; x &gt; 1); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>items.filter(fn), items.find(fn), items.findIndex(fn), items.findLast(fn), items.findLastIndex(fn)</code></h3>
+            <p>Return a filtered array; the matching item or <code>undefined</code>; or the matching index or
+              <code>-1</code>.</p>
+            <pre><code>[1, 2, 3].filter(x =&gt; x &gt; 1); // [2, 3]
+[1, 2, 3].find(x =&gt; x &gt; 1); // 2
+[1, 2, 3].findIndex(x =&gt; x &gt; 1); // 1</code></pre>
+          </article>
+          <article>
+            <h3><code>items.fill(value, start?, end?)</code></h3>
+            <p>Fills <code>[start, end)</code> in place. Returns the array.</p>
+            <pre><code>var a = [1, 2, 3];
+a.fill(0, 1); // [1, 0, 0]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.flat(depth?), items.flatMap(fn)</code></h3>
+            <p>Return a new flattened array. <code>flatMap</code> maps then flattens one level.</p>
+            <pre><code>[1, [2, [3]]].flat(2); // [1, 2, 3]
+[1, 2].flatMap(x =&gt; [x, x]); // [1, 1, 2, 2]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.forEach(fn)</code></h3>
+            <p>Runs a callback for each element. Returns <code>undefined</code>.</p>
+            <pre><code>var n = 0;
+[1, 2].forEach(x =&gt; n += x);
+n; // 3</code></pre>
+          </article>
+          <article>
+            <h3><code>items.includes(value, fromIndex?), items.indexOf(value, fromIndex?), items.lastIndexOf(value, fromIndex?)</code></h3>
+            <p>Return a boolean, or the first/last matching index or <code>-1</code>. <code>includes</code> matches
+              <code>NaN</code>.</p>
+            <pre><code>[1, 2, 1].includes(2); // true
+[1, 2, 1].lastIndexOf(1); // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>items.join(separator?), items.toString()</code></h3>
+            <p>Return a string joining the elements with <code>separator</code>, or a comma by default.</p>
+            <pre><code>[1, 2, 3].join("-"); // 1-2-3
+[1, 2, 3].toString(); // 1,2,3</code></pre>
+          </article>
+          <article>
+            <h3><code>items.map(fn)</code></h3>
+            <p>Returns a new array of callback results.</p>
+            <pre><code>[1, 2].map(x =&gt; x * 2); // [2, 4]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.pop(), items.shift()</code></h3>
+            <p>Remove and return the last or first item, or <code>undefined</code> when empty. Mutate the array.</p>
+            <pre><code>var a = [1, 2];
+a.pop(); // 2</code></pre>
+          </article>
+          <article>
+            <h3><code>items.push(value), items.unshift(...values)</code></h3>
+            <p>Append or prepend values in place. Return the new length.</p>
+            <pre><code>var a = [1];
+a.unshift(2, 3); // 3
+a; // [2, 3, 1]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.reduce(fn, initial?), items.reduceRight(fn, initial?)</code></h3>
+            <p>Return a reduced value. Empty arrays require an initial value, otherwise an error is raised.</p>
+            <pre><code>[1, 2, 3].reduce((sum, x) =&gt; sum + x, 0); // 6</code></pre>
+          </article>
+          <article>
+            <h3><code>items.reverse()</code></h3>
+            <p>Reverses in place. Returns the array.</p>
+            <pre><code>var a = [1, 2];
+a.reverse(); // [2, 1]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.slice(start?, end?)</code></h3>
+            <p>Returns a new array for <code>[start, end)</code>. Supports negative indexes.</p>
+            <pre><code>[1, 2, 3].slice(1); // [2, 3]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.sort()</code></h3>
+            <p>Sorts in place by string representation. Returns the array.</p>
+            <pre><code>var a = [10, 2];
+a.sort(); // [10, 2]</code></pre>
+          </article>
+          <article>
+            <h3><code>items.splice(start, deleteCount?, ...items)</code></h3>
+            <p>Changes an array in place and returns the removed items.</p>
+            <pre><code>var a = [1, 2, 3];
+a.splice(1, 1, 9); // [2]
+a; // [1, 9, 3]</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Object, Number, and Boolean -->
       <section id="objects" class="doc-section">
         <h2>Object, Number, and Boolean</h2>
-        <p><code>Object.assign(target, ...sources)</code> copies properties and returns the target.
-          <code>Object.hasOwn(object, property)</code> returns a boolean. <code>Object.keys(object)</code>,
-          <code>Object.values(object)</code>, and <code>Object.entries(object)</code> return arrays.
-          <code>object.toString()</code>, <code>number.toString()</code>, and <code>boolean.toString()</code> return
-          strings. <code>Number.isInteger(value)</code>, <code>Number.isFinite(value)</code>, and
-          <code>Number.isNaN(value)</code> return booleans; Number methods do not coerce.</p>
-        <pre><code>Object.keys({a: 1, b: 2}); // ["a", "b"]
-Number.isInteger(42); // true</code></pre>
+        <div class="api-grid">
+          <article>
+            <h3><code>Object.assign(target, ...sources)</code></h3>
+            <p>Copies source properties into target. Returns the target object.</p>
+            <pre><code>Object.assign({a: 1}, {b: 2}); // {"a": 1, "b": 2}</code></pre>
+          </article>
+          <article>
+            <h3><code>Object.hasOwn(object, property)</code></h3>
+            <p>Returns a boolean indicating whether the object has an own property.</p>
+            <pre><code>Object.hasOwn({a: 1}, "a"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>Object.keys(object), Object.values(object), Object.entries(object)</code></h3>
+            <p>Return arrays of own keys, values, or <code>[key, value]</code> pairs.</p>
+            <pre><code>Object.keys({a: 1, b: 2}); // ["a", "b"]
+Object.values({a: 1, b: 2}); // [1, 2]
+Object.entries({a: 1}); // [["a", 1]]</code></pre>
+          </article>
+          <article>
+            <h3><code>object.toString()</code></h3>
+            <p>Returns a readable object string.</p>
+            <pre><code>({a: 1}).toString(); // {"a": 1}</code></pre>
+          </article>
+          <article>
+            <h3><code>Number.isInteger(value)</code></h3>
+            <p>Returns <code>true</code> only for integer numbers. Does not coerce.</p>
+            <pre><code>Number.isInteger(42); // true
+Number.isInteger("42"); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>Number.isFinite(value)</code></h3>
+            <p>Returns <code>true</code> only for finite numeric values. Does not coerce.</p>
+            <pre><code>Number.isFinite(3.14); // true
+Number.isFinite("3.14"); // false</code></pre>
+          </article>
+          <article>
+            <h3><code>Number.isNaN(value)</code></h3>
+            <p>Returns <code>true</code> only for numeric <code>NaN</code>. Does not coerce.</p>
+            <pre><code>Number.isNaN(parseInt("x")); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>number.toString()</code></h3>
+            <p>Returns the numeric string.</p>
+            <pre><code>(42).toString(); // 42</code></pre>
+          </article>
+          <article>
+            <h3><code>boolean.toString()</code></h3>
+            <p>Returns the boolean string.</p>
+            <pre><code>true.toString(); // true</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Math -->
       <section id="math" class="doc-section">
         <h2>Math</h2>
         <p>Constants: <code>E</code>, <code>LN10</code>, <code>LN2</code>, <code>LOG10E</code>, <code>LOG2E</code>,
-          <code>PI</code>, <code>SQRT1_2</code>, <code>SQRT2</code>. Unary numeric methods take one number and return a
-          number: <code>abs</code>, <code>sqrt</code>, <code>acos</code>, <code>acosh</code>, <code>asin</code>,
+          <code>PI</code>, <code>SQRT1_2</code>, and <code>SQRT2</code>.</p>
+        <pre><code>Math.PI; // 3.141592653589793</code></pre>
+        <p>Every unary method takes one numeric argument and returns a number. Numeric arguments must be numbers.</p>
+        <div class="api-table">
+          <code>abs</code>, <code>sqrt</code>, <code>acos</code>, <code>acosh</code>, <code>asin</code>,
           <code>asinh</code>, <code>atan</code>, <code>atanh</code>, <code>cbrt</code>, <code>ceil</code>,
           <code>clz32</code>, <code>cos</code>, <code>cosh</code>, <code>exp</code>, <code>expm1</code>,
           <code>f16round</code>, <code>floor</code>, <code>fround</code>, <code>log</code>, <code>log10</code>,
           <code>log1p</code>, <code>log2</code>, <code>round</code>, <code>sign</code>, <code>sin</code>,
-          <code>sinh</code>, <code>tan</code>, <code>tanh</code>, <code>trunc</code>. Also: <code>atan2(y, x)</code>,
-          <code>hypot(...values)</code>, <code>imul(left, right)</code>, <code>max(...values)</code>,
-          <code>min(...values)</code>, <code>pow(base, exponent)</code>, <code>random()</code>,
-          <code>sumPrecise(...values)</code>. Numeric arguments must be numbers. <code>hypot()</code> is <code>0</code>;
-          <code>max()</code> is <code>-Infinity</code>; <code>min()</code> is <code>Infinity</code>.</p>
-        <pre><code>Math.sqrt(9); // 3
-Math.max(3, 7, 4); // 7
-Math.pow(2, 5); // 32
-Math.imul(2, 21); // 42
-Math.random(); // pseudo-random number in [0, 1)</code></pre>
+          <code>sinh</code>, <code>tan</code>, <code>tanh</code>, <code>trunc</code>.
+          <pre><code>Math.abs(-42); // 42
+Math.sqrt(9); // 3.0</code></pre>
+        </div>
+        <div class="api-grid">
+          <article>
+            <h3><code>Math.atan2(y, x)</code></h3>
+            <p>Returns the angle in radians from the positive x-axis to the point <code>(x, y)</code>.</p>
+            <pre><code>Math.atan2(0, 1); // 0.0</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.hypot(...values)</code></h3>
+            <p>Returns the square root of the sum of squares, and <code>0</code> when called without arguments.</p>
+            <pre><code>Math.hypot(3, 4); // 5.0
+Math.hypot(); // 0.0</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.imul(left, right)</code></h3>
+            <p>Returns the signed 32-bit multiplication of two integer values.</p>
+            <pre><code>Math.imul(2, 21); // 42</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.max(...values), Math.min(...values)</code></h3>
+            <p>Return the largest or smallest number. <code>Math.max()</code> is <code>-Infinity</code>;
+              <code>Math.min()</code> is <code>Infinity</code>.</p>
+            <pre><code>Math.max(3, 7, 4); // 7.0
+Math.min(3, 7, 4); // 3.0</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.pow(base, exponent)</code></h3>
+            <p>Returns <code>base</code> raised to <code>exponent</code>.</p>
+            <pre><code>Math.pow(2, 5); // 32.0</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.random()</code></h3>
+            <p>Returns a pseudo-random number from <code>0</code> inclusive to <code>1</code> exclusive. The value is
+              not deterministic.</p>
+            <pre><code>Math.random(); // pseudo-random number in [0, 1)</code></pre>
+          </article>
+          <article>
+            <h3><code>Math.sumPrecise(...values)</code></h3>
+            <p>Returns a compensated floating-point sum of its numeric arguments.</p>
+            <pre><code>Math.sumPrecise(1, 2, 3); // 6.0</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Date and RegExp -->
       <section id="date" class="doc-section">
         <h2>Date and RegExp</h2>
-        <p><code>Date.now()</code> returns the current UTC Unix timestamp. <code>new Date()</code> takes no arguments;
-          <code>date.getTime()</code> returns its timestamp and <code>date.toString()</code> returns a UTC ISO-like
-          string. Regex literals use <code>/pattern/flags</code>; flags are <code>g</code>, <code>i</code>,
-          <code>m</code>, <code>s</code>, and <code>u</code>. <code>new RegExp(patternOrRegex, flags?)</code> constructs
-          one. Properties are <code>source</code>, <code>flags</code>, <code>global</code>, <code>ignoreCase</code>,
-          <code>multiline</code>, <code>dotAll</code>, and <code>unicode</code>. <code>test(value)</code> returns a
-          boolean, <code>exec(value)</code> returns a match array or <code>null</code>, and <code>toString()</code>
-          returns literal-style text.</p>
-        <pre><code>/\d+/.test("a42"); // true
-/hello/gi.flags; // gi</code></pre>
+        <div class="api-grid">
+          <article>
+            <h3><code>Date.now()</code></h3>
+            <p>Returns the current UTC Unix timestamp in milliseconds. The value is not deterministic.</p>
+            <pre><code>Date.now(); // current timestamp number</code></pre>
+          </article>
+          <article>
+            <h3><code>new Date()</code></h3>
+            <p>Creates a date for the current UTC time. Takes no arguments. Returns a <code>Date</code>.</p>
+            <pre><code>new Date().getTime(); // current timestamp number</code></pre>
+          </article>
+          <article>
+            <h3><code>date.getTime()</code></h3>
+            <p>Returns the stored timestamp in milliseconds.</p>
+            <pre><code>var d = new Date();
+d.getTime(); // timestamp number</code></pre>
+          </article>
+          <article>
+            <h3><code>date.toString()</code></h3>
+            <p>Returns a UTC ISO-like string in the form <code>YYYY-MM-DDTHH:mm:ss.SSSZ</code>.</p>
+            <pre><code>new Date().toString(); // UTC ISO-like string</code></pre>
+          </article>
+          <article>
+            <h3><code>/pattern/flags</code></h3>
+            <p>A regular expression literal. Flags are <code>g</code>, <code>i</code>, <code>m</code>, <code>s</code>,
+              and <code>u</code>. Returns a <code>RegExp</code>.</p>
+            <pre><code>/hello/i.test("HELLO"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>new RegExp(patternOrRegex, flags?)</code></h3>
+            <p>Creates or copies a regular expression. Returns a <code>RegExp</code>.</p>
+            <pre><code>new RegExp("hello", "i").test("HELLO"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>regexp.source, regexp.flags, regexp.global, regexp.ignoreCase, regexp.multiline, regexp.dotAll, regexp.unicode</code></h3>
+            <p>Read-only pattern metadata and flag booleans.</p>
+            <pre><code>/hello/gi.flags; // gi
+/hello/i.ignoreCase; // true</code></pre>
+          </article>
+          <article>
+            <h3><code>regexp.test(value)</code></h3>
+            <p>Returns a boolean indicating whether the pattern matches the value converted to a string.</p>
+            <pre><code>/\d+/.test("a42"); // true</code></pre>
+          </article>
+          <article>
+            <h3><code>regexp.exec(value)</code></h3>
+            <p>Returns a match array with capture groups, or <code>null</code>.</p>
+            <pre><code>/he(.)l/.exec("hello"); // ["hell", "l"]</code></pre>
+          </article>
+          <article>
+            <h3><code>regexp.toString()</code></h3>
+            <p>Returns a literal-style regex string.</p>
+            <pre><code>/hello/gi.toString(); // /hello/gi</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- JSON and Errors -->
       <section id="json" class="doc-section">
         <h2>JSON and Errors</h2>
-        <p><code>JSON.parse(text)</code> returns a parsed value and requires one string.
-          <code>JSON.stringify(value)</code> returns a JSON string or <code>undefined</code> and requires one argument.
-          Top-level <code>undefined</code>, functions, RegExp, and Error values return <code>undefined</code>;
-          unsupported object properties are omitted, array values become <code>null</code>, non-finite numbers become
-          <code>null</code>, and circular arrays or objects raise an error.</p>
-        <pre><code>JSON.parse('{"answer":42}').answer; // 42
-JSON.stringify({answer: 42}); // {"answer":42}
-
-var error = new TypeError("expected a number");
+        <div class="api-grid">
+          <article>
+            <h3><code>JSON.parse(text)</code></h3>
+            <p>Parses one string into an object, array, number, boolean, <code>null</code>, or string. Raises an error
+              on invalid JSON.</p>
+            <pre><code>JSON.parse('{"answer":42}').answer; // 42</code></pre>
+          </article>
+          <article>
+            <h3><code>JSON.stringify(value)</code></h3>
+            <p>Returns a JSON string for one value, or <code>undefined</code> for a top-level <code>undefined</code>,
+              function, RegExp, or Error.</p>
+            <pre><code>JSON.stringify({answer: 42}); // {"answer":42}</code></pre>
+            <p>Unsupported object properties are omitted; unsupported array values become <code>null</code>; non-finite
+              numbers become <code>null</code>; circular arrays or objects raise an error.</p>
+          </article>
+          <article>
+            <h3><code>new Error(message?), new TypeError(message?), new ReferenceError(message?), new SyntaxError(message?)</code></h3>
+            <p>Create an Error object with <code>message</code>, <code>name</code>, <code>stack</code>, and
+              <code>toString()</code>. <code>name</code> defaults to the constructor name.</p>
+            <pre><code>var error = new TypeError("expected a number");
 error.name; // TypeError
 error.toString(); // TypeError: expected a number</code></pre>
-        <p>Constructors are <code>new Error(message?)</code>, <code>new TypeError(message?)</code>,
-          <code>new ReferenceError(message?)</code>, and <code>new SyntaxError(message?)</code>. Each has
-          <code>message</code>, <code>name</code>, <code>stack</code>, and <code>toString()</code>.</p>
+            <p>Error objects can be thrown with <code>throw</code> and caught with <code>try</code>/<code>catch</code>.
+              Raw values can also be thrown. An uncaught throw is reported with its value and a source location
+              (<code>file:line:column</code>). When the throw propagates out of user functions, the report also lists
+              the calling frames as <code>at name</code> lines; anonymous functions appear as <code>at anonymous</code>.
+            </p>
+          </article>
+        </div>
       </section>
 
+      <!-- File, Process, and Network -->
       <section id="host" class="doc-section">
         <h2>File, Process, and Network</h2>
-        <p class="note">Host-integrated APIs depend on the machine and its permissions.</p>
-        <p><code>File.read(path)</code> returns UTF-8 text. <code>File.readLines(path)</code> returns lines with CRLF
-          normalized to LF. <code>File.write(path, content)</code> and <code>File.append(path, content)</code> return
-          <code>undefined</code>. <code>process.argv</code> is the argument array; <code>process.env</code> is a
-          read-only environment snapshot. <code>process.exit(code?)</code> exits with a numeric status, default
-          <code>0</code>. <code>process.run(command, args?)</code> synchronously returns
-          <code>{stdout, stderr, status}</code>. <code>fetch(url, options?)</code> is the synchronous HTTP API described
-          above.</p>
-        <pre><code>File.write("out.txt", "hello"); // undefined
-process.run("echo", ["hello"]).stdout; // hello followed by newline</code></pre>
+        <p class="note">These APIs are host-integrated: their inputs, permissions, and results depend on the machine
+          running GiavaScript.</p>
+        <div class="api-grid">
+          <article>
+            <h3><code>File.read(path)</code></h3>
+            <p>Reads a UTF-8 file as a string.</p>
+            <pre><code>File.read("notes.txt"); // file contents string</code></pre>
+          </article>
+          <article>
+            <h3><code>File.readLines(path)</code></h3>
+            <p>Reads a file into a string array, normalizing CRLF to LF.</p>
+            <pre><code>File.readLines("notes.txt"); // array of lines</code></pre>
+          </article>
+          <article>
+            <h3><code>File.write(path, content)</code></h3>
+            <p>Writes a string file. Returns <code>undefined</code>.</p>
+            <pre><code>File.write("out.txt", "hello"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>File.append(path, content)</code></h3>
+            <p>Appends a string to a file. Returns <code>undefined</code>.</p>
+            <pre><code>File.append("out.txt", "\nmore"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>process.argv</code></h3>
+            <p>Program argument string array.</p>
+            <pre><code>process.argv; // argument array</code></pre>
+          </article>
+          <article>
+            <h3><code>process.env</code></h3>
+            <p>Read-only snapshot of host environment variables.</p>
+            <pre><code>process.env["HOME"]; // environment string or undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>process.exit(code?)</code></h3>
+            <p>Ends the process with a numeric status, default <code>0</code>.</p>
+            <pre><code>process.exit(1); // exits with status 1</code></pre>
+          </article>
+          <article>
+            <h3><code>process.run(command, args?)</code></h3>
+            <p>Runs a command synchronously and returns <code>{stdout, stderr, status}</code>.</p>
+            <pre><code>process.run("echo", ["hello"]).stdout; // hello followed by newline</code></pre>
+          </article>
+          <article>
+            <h3><code>fetch(url, options?)</code></h3>
+            <p>Synchronous HTTP request. See <a href="#global">Global APIs</a>. Returns
+              <code>{status, ok, headers, text, json}</code>.</p>
+            <pre><code>fetch("https://example.com").ok; // boolean</code></pre>
+          </article>
+        </div>
       </section>
 
+      <!-- Compatibility -->
       <section id="compatibility" class="doc-section">
         <h2>Compatibility</h2>
         <p>GiavaScript is a curated runtime, not an ECMAScript-compliant browser or Node.js environment. These are not
           available:</p>
         <ul class="not-available">
-          <li><code>let</code> and <code>const</code></li>
           <li>Browser DOM APIs</li>
           <li><code>print()</code> and <code>len()</code></li>
           <li><code>Array.fromAsync</code>, <code>Array.toReversed</code>, <code>Array.toSorted</code>,
@@ -332,7 +994,7 @@ process.run("echo", ["hello"]).stdout; // hello followed by newline</code></pre>
     </main>
   </div>
   <footer class="footer">
-    GiavaScript v0.8.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
+    GiavaScript v0.9.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
     <a href="../">Home</a>
   </footer>
   <script src="docs.js"></script>
