@@ -56,13 +56,19 @@
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>brew update &amp;&amp; brew upgrade giavascript</code></pre>
         </div>
-        <p>Run a file with <code>gs path/to/program.js</code>, or start the REPL with <code>gs</code>. Leave the REPL
-          with <code>:quit</code>. An empty file is an error. Runtime errors are written to standard error with their
-          source location (<code>file:line:column</code>), the offending source line, and a caret. Any <code>Error:</code>
-          message gives the CLI an exit status of <code>1</code>.</p>
+        <p>Run a file with <code>gs path/to/program.js</code>, or start the REPL with <code>gs</code>. The REPL
+          continues open blocks with a <code>...</code> prompt and supports <code>.help</code>, <code>.history</code>,
+          <code>.exit</code>, and <code>:quit</code>. Run a snippet with <code>gs -e "code"</code>, or parse a file
+          without executing it with <code>gs --check path/to/program.js</code>. An empty file is an error. Runtime errors
+          are written to standard error with their source location (<code>file:line:column</code>), the offending source
+          line, and a caret. Any <code>Error:</code> message gives the CLI an exit status of <code>1</code>.</p>
         <div class="code-wrap"><button class="copy" type="button">Copy</button>
           <pre><code>var name = "GiavaScript";
 console.log(`Hello, ${name}`); // stdout: Hello, GiavaScript</code></pre>
+        </div>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>gs -e "1 + 1"       // prints 2
+gs --check main.js  // exits 1 on syntax errors, runs nothing</code></pre>
         </div>
       </section>
 
@@ -79,6 +85,19 @@ b = 2;
 const c = 3; // c = 4 would raise an error
 a += 1; // 2
 b++; // 3</code></pre>
+        </div>
+        <p>Declarations and assignments support destructuring. Array patterns bind by position; object patterns bind by
+          key, with renaming (<code>{key: name}</code>), rest (<code>...rest</code>), and defaults. A default applies
+          only when the value is <code>undefined</code>; <code>null</code> is kept. Function and arrow parameter
+          patterns are not supported.</p>
+        <div class="code-wrap"><button class="copy" type="button">Copy</button>
+          <pre><code>var [first, ...rest] = [1, 2, 3];
+first; // 1
+rest; // [2, 3]
+
+var {name, age: years = 0} = {name: "Ada"};
+name; // Ada
+years; // 0</code></pre>
         </div>
         <p>Values are numbers, strings (single or double quotes), <code>true</code>, <code>false</code>,
           <code>null</code>, <code>undefined</code>, arrays, objects, functions, dates, regular expressions, and
