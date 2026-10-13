@@ -4,11 +4,11 @@ var sections = Array.from(document.querySelectorAll(".doc-section"));
 var menu = document.querySelector(".menu");
 var sidebar = document.querySelector(".sidebar");
 
-var tokenPattern = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\/\/[^\n]*)|\b(var|function|return|if|else|for|of|in|switch|case|break|default|new|typeof|throw|try|catch|finally)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\()/g;
+var tokenPattern = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)|(\/\/[^\n]*)|\b(var|let|const|function|return|if|else|for|of|in|while|do|switch|case|break|continue|default|new|typeof|throw|try|catch|finally|null|undefined|true|false)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\()/g;
 
 document.querySelectorAll("pre code").forEach(function (block) {
   var source = block.textContent.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  block.innerHTML = source.replace(tokenPattern, function (match, string, comment, keyword, number, func) {
+  block.innerHTML = source.replace(tokenPattern, function (match, string, comment, keyword, number) {
     if (string) return '<span class="string">' + match + '</span>';
     if (comment) return '<span class="comment">' + match + '</span>';
     if (keyword) return '<span class="keyword">' + match + '</span>';
@@ -17,9 +17,28 @@ document.querySelectorAll("pre code").forEach(function (block) {
   });
 });
 
+document.querySelectorAll("pre").forEach(function (pre) {
+  var wrap = pre.parentElement;
+  if (!wrap.classList.contains("code-wrap")) {
+    wrap = document.createElement("div");
+    wrap.className = "code-wrap";
+    pre.parentNode.insertBefore(wrap, pre);
+    wrap.appendChild(pre);
+  }
+  if (!wrap.querySelector(".copy")) {
+    var button = document.createElement("button");
+    button.className = "copy";
+    button.type = "button";
+    button.textContent = "Copy";
+    wrap.appendChild(button);
+  }
+});
+
 document.querySelectorAll(".copy").forEach(function (button) {
   button.addEventListener("click", function () {
-    navigator.clipboard.writeText(button.parentElement.querySelector("code").textContent);
+    var code = button.parentElement.querySelector("code");
+    if (!code) return;
+    navigator.clipboard.writeText(code.textContent);
     button.textContent = "Copied";
     setTimeout(function () { button.textContent = "Copy"; }, 1200);
   });
