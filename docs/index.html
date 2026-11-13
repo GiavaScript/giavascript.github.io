@@ -32,6 +32,7 @@
         <a href="#date">Date and RegExp</a>
         <a href="#json">JSON and Errors</a>
         <a href="#host">File, Process, and Network</a>
+        <a href="#embedding">Embedding in Crystal</a>
         <a href="#compatibility">Compatibility</a>
       </nav>
     </aside>
@@ -424,6 +425,36 @@ isNaN(42); // false</code></pre>
             <p>Reads one standard-input line without its newline. Returns the line as a string, or <code>""</code> at
               EOF. Result depends on input.</p>
             <pre><code>readLine(); // string from stdin, or "" at EOF</code></pre>
+          </article>
+          <article>
+            <h3><code>readAll()</code></h3>
+            <p>Reads all of standard input as one string. Result depends on input.</p>
+            <pre><code>readAll(); // complete stdin string</code></pre>
+          </article>
+          <article>
+            <h3><code>readAllLines()</code></h3>
+            <p>Reads all of standard input and splits it into an array of lines. Line endings are removed. Result
+              depends on input.</p>
+            <pre><code>readAllLines(); // array of stdin lines</code></pre>
+          </article>
+          <article>
+            <h3><code>sleep(ms)</code></h3>
+            <p>Blocks for a number of milliseconds. Returns <code>undefined</code>. Zero or negative values return
+              immediately.</p>
+            <pre><code>sleep(50); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>parseArgs(argv)</code></h3>
+            <p>Parses an argument array into an object with <code>_</code> (positionals) and <code>flags</code>.
+              Supports <code>--flag</code>, <code>--key=value</code>, <code>--key value</code>, bundled short flags
+              (<code>-abc</code>), and <code>--</code> to end flag parsing. Repeated flags are last-wins; a value-less
+              long flag is <code>true</code>.</p>
+            <pre><code>var args = parseArgs(["--verbose", "--out=dist", "build.js"]);
+args.flags.verbose; // true
+args.flags.out; // "dist"
+args._; // ["build.js"]</code></pre>
+            <p>A long flag followed by a non-flag token consumes it as the value. Put positionals before a value-less
+              long flag, or use <code>--key=value</code>.</p>
           </article>
           <article>
             <h3><code>fetch(url, options?)</code></h3>
@@ -968,6 +999,66 @@ error.toString(); // TypeError: expected a number</code></pre>
             <pre><code>File.append("out.txt", "\nmore"); // undefined</code></pre>
           </article>
           <article>
+            <h3><code>File.exists(path)</code></h3>
+            <p>Reports whether a path exists. Returns a boolean.</p>
+            <pre><code>File.exists("notes.txt"); // true or false</code></pre>
+          </article>
+          <article>
+            <h3><code>File.isDir(path)</code></h3>
+            <p>Reports whether a path is a directory. Returns a boolean.</p>
+            <pre><code>File.isDir("docs"); // true or false</code></pre>
+          </article>
+          <article>
+            <h3><code>File.size(path)</code></h3>
+            <p>Returns a file's size in bytes as a number. Files larger than 2 GiB are returned as a floating-point
+              number.</p>
+            <pre><code>File.size("notes.txt"); // size in bytes</code></pre>
+          </article>
+          <article>
+            <h3><code>File.listDir(path)</code></h3>
+            <p>Returns directory entry names (not full paths) as an array of strings.</p>
+            <pre><code>File.listDir("."); // array of entry names</code></pre>
+          </article>
+          <article>
+            <h3><code>File.mkdir(path)</code></h3>
+            <p>Creates a directory and any parents. Returns <code>undefined</code>.</p>
+            <pre><code>File.mkdir("out/cache"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>File.remove(path)</code></h3>
+            <p>Deletes a file, or a directory and its contents. Returns <code>undefined</code>.</p>
+            <pre><code>File.remove("out/cache"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>File.rename(from, to)</code></h3>
+            <p>Moves or renames a file or directory. Returns <code>undefined</code>.</p>
+            <pre><code>File.rename("old.txt", "new.txt"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>File.copy(from, to)</code></h3>
+            <p>Copies a file. Returns <code>undefined</code>.</p>
+            <pre><code>File.copy("notes.txt", "notes.bak"); // undefined</code></pre>
+          </article>
+          <article>
+            <h3><code>File.glob(pattern)</code></h3>
+            <p>Returns paths matching a glob pattern such as <code>*.log</code>. Returns an array of strings.</p>
+            <pre><code>File.glob("logs/*.log"); // array of matching paths</code></pre>
+          </article>
+          <article>
+            <h3><code>Path.join(...parts)</code></h3>
+            <p>Joins path segments using the host separator. Returns a string.</p>
+            <pre><code>Path.join("logs", "app.log"); // joined path string</code></pre>
+          </article>
+          <article>
+            <h3><code>Path.dirname(p), Path.basename(p), Path.extname(p), Path.resolve(p)</code></h3>
+            <p>Decompose and resolve paths. <code>dirname</code> returns the parent directory, <code>basename</code>
+              the final segment, <code>extname</code> the extension including the dot, and <code>resolve</code> the
+              absolute path from the current directory.</p>
+            <pre><code>Path.basename("logs/app.log"); // "app.log"
+Path.extname("logs/app.log"); // ".log"
+Path.resolve("."); // absolute path string</code></pre>
+          </article>
+          <article>
             <h3><code>process.argv</code></h3>
             <p>Program argument string array.</p>
             <pre><code>process.argv; // argument array</code></pre>
@@ -996,6 +1087,56 @@ error.toString(); // TypeError: expected a number</code></pre>
         </div>
       </section>
 
+      <!-- Embedding -->
+      <section id="embedding" class="doc-section">
+        <h2>Embedding in Crystal</h2>
+        <p class="note">GiavaScript can be used as a Crystal shard. Values cross the boundary with the explicit
+          <code>Value</code> union; there is no automatic bridging to arbitrary Crystal objects.</p>
+        <div class="api-grid">
+          <article>
+            <h3><code>Interpreter#eval_value(source)</code></h3>
+            <p>Evaluates GiavaScript and returns the last expression as a <code>Value</code>. Raises
+              <code>ExecutionError</code> on failure.</p>
+            <pre><code>engine.eval_value("1 + 1"); # 2</code></pre>
+          </article>
+          <article>
+            <h3><code>Interpreter#set(name, value), Interpreter#get(name)</code></h3>
+            <p>Writes and reads global bindings. <code>get</code> returns <code>undefined</code> for an unknown name.</p>
+            <pre><code>engine.set("answer", 42)
+engine.get("answer") # 42</code></pre>
+          </article>
+          <article>
+            <h3><code>Interpreter#register(name) { |args| ... }</code></h3>
+            <p>Exposes a host function to GiavaScript. The block receives an argument array and returns a
+              <code>Value</code>.</p>
+            <pre><code>engine.register("double") do |args|
+  args[0].as(Int32) * 2
+end
+engine.eval_value("double(21)") # 42</code></pre>
+          </article>
+          <article>
+            <h3><code>Interpreter#call(name, args)</code></h3>
+            <p>Calls a registered host function or a function defined in GiavaScript.</p>
+            <pre><code>engine.call("double", [21] of GiavaScript::Value) # 42</code></pre>
+          </article>
+          <article>
+            <h3><code>Interpreter.new(capabilities: [...])</code></h3>
+            <p>Scopes optional host APIs. Use <code>:file</code> for <code>File</code>/<code>Path</code>,
+              <code>:fetch</code> for network access, and <code>:process</code> for process control. Omitting
+              <code>capabilities</code> keeps the full CLI set. This selects capabilities; it is not a security
+              boundary against malicious native code.</p>
+            <pre><code>engine = GiavaScript::Interpreter.new(capabilities: [:console, :math, :json])
+engine.eval_value("typeof File") # "undefined"</code></pre>
+          </article>
+        </div>
+        <h3>Install</h3>
+        <pre><code>dependencies:
+  giavascript:
+    github: GiavaScript/GiavaScript</code></pre>
+        <p>Then <code>require "giavascript"</code> and create an <code>Interpreter</code>. <code>eval</code> remains
+          available for CLI-style diagnostic strings, while <code>eval_value</code> returns typed values.</p>
+      </section>
+
       <!-- Compatibility -->
       <section id="compatibility" class="doc-section">
         <h2>Compatibility</h2>
@@ -1013,7 +1154,7 @@ error.toString(); // TypeError: expected a number</code></pre>
     </main>
   </div>
   <footer class="footer">
-    GiavaScript v0.10.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
+    GiavaScript v0.11.0 &middot; <a href="https://github.com/GiavaScript/GiavaScript">Source</a> &middot;
     <a href="../">Home</a>
   </footer>
   <script src="docs.js"></script>
